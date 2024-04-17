@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:nextra/HomeScreen.dart';
 import 'package:nextra/LoginScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -23,29 +22,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
+  final apiKey = "AIzaSyD-WktVvIdMXJ6kV99h92PYFRhUQ_1xNmQ";
+  final projectId = "nextra-71204";
+
   bool _passwordVisible = false;
-
-  void _saveLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isLoggedIn', true); // User logged in, set to true
-  }
-
-  Future<void> _checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn =
-        prefs.getBool('isLoggedIn') ?? false; // Default value is false
-    if (isLoggedIn) {
-      // User is already logged in, navigate to HomeScreen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    }
-  }
 
   Future<void> _saveUserDetails(String userId) async {
     final String databaseUrl =
-        'https://nextra-71204-default-rtdb.asia-southeast1.firebasedatabase.app/users/$userId';
+        'https://nextra-71204.firebaseio.com/users.json?auth=$apiKey'; // Update with your Firebase project URL
 
     final userDetails = {
       'username': _usernameController.text.trim(),
@@ -68,11 +52,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('User details saved successfully!'),
         ));
-
         //finish the current screen and navigate to HomeScreen
         Navigator.of(context).pop();
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => HomeScreen(),
+          builder: (context) => LoginScreen(),
         ));
       } else {
         print('Failed to save user details');
@@ -84,9 +67,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _signUp() async {
-    final apiKey = "AIzaSyD-WktVvIdMXJ6kV99h92PYFRhUQ_1xNmQ";
-    final projectId = "nextra-71204";
-
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey';
 
@@ -107,7 +87,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (response.statusCode == 200) {
         print('Sign up successful');
         print('User ID: ${responseData['localId']}');
-        _saveLoginStatus();
         _saveUserDetails(responseData['localId']);
         // Navigate to Home Screen after successful login with the user ID
         Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -124,13 +103,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } catch (error) {
       print('Error: $error');
       // Show error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(error.toString()),
+      ));
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginStatus(); // Check if user is already logged in
   }
 
   @override

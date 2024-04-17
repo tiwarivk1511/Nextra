@@ -16,19 +16,21 @@ class Assets {
   static const String assetsTechImg = 'assets/techImg.png';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String libDeveloperProfile = 'lib/DeveloperProfile.dart';
+  static const String libForgetPasswordScreen = 'lib/ForgetPasswordScreen.dart';
   static const String libGenerateQrCode = 'lib/GenerateQrCode.dart';
   static const String libHelpScreen = 'lib/HelpScreen.dart';
   static const String libHomeScreen = 'lib/HomeScreen.dart';
   static const String libLandingPage = 'lib/LandingPage.dart';
   static const String libLoginScreen = 'lib/LoginScreen.dart';
   static const String libMain = 'lib/main.dart';
-  static const String libNetworkSpeedTestScreen =
-      'lib/NetworkSpeedTestScreen.dart';
+  static const String libNetworkSpeedTestScreen = 'lib/NetworkSpeedTestScreen.dart';
   static const String libOcrScreen = 'lib/OcrScreen.dart';
   static const String libPrivacyPolicy = 'lib/PrivacyPolicy.dart';
   static const String libQrScanner = 'lib/QrScanner.dart';
+  static const String libSignupScreen = 'lib/SignupScreen.dart';
   static const String libTalkToBot = 'lib/TalkToBot.dart';
   static const String libTermsCondition = 'lib/TermsCondition.dart';
   static const String libTranslationScreen = 'lib/TranslationScreen.dart';
   static const String libUserProfile = 'lib/UserProfile.dart';
+
 }

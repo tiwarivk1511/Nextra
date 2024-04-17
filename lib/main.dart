@@ -1,11 +1,18 @@
 import 'dart:ui';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'LandingPage.dart'; // Import Svg package
+import 'LandingPage.dart';
+
+Future<FirebaseApp> initializeFirebase() async {
+  FirebaseApp firebaseApp = await Firebase.initializeApp();
+  return firebaseApp;
+}
 
 void main() {
+  initializeFirebase();
   runApp(const MyApp());
 }
 
@@ -26,7 +33,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Wait for 3 seconds and then navigate to the home screen
+    // Wait for 3 seconds and then navigate to the landing page
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LandingPage()),
@@ -35,7 +42,8 @@ class SplashScreen extends StatelessWidget {
 
     // Display your splash screen UI
     return Scaffold(
-      backgroundColor: Colors.transparent, // Set background color to transparent
+      backgroundColor:
+          Colors.transparent, // Set background color to transparent
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -44,9 +52,11 @@ class SplashScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           Container(
-            color: Colors.black.withOpacity(0.8), // Apply a semi-transparent black color
+            color: Colors.black
+                .withOpacity(0.8), // Apply a semi-transparent black color
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0), // Apply blur effect
+              filter: ImageFilter.blur(
+                  sigmaX: 5.0, sigmaY: 5.0), // Apply blur effect
               child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -75,4 +85,3 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
-

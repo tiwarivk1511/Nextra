@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:nextra/HomeScreen.dart';
 import 'package:nextra/LoginScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -29,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<void> _saveUserDetails(String userId) async {
     final String databaseUrl =
-        'https://nextra-71204.firebaseio.com/users.json?auth=$apiKey'; // Update with your Firebase project URL
+        'https://nextra-71204-default-rtdb.asia-southeast1.firebasedatabase.app/users/$userId.json?auth=$apiKey';
 
     final userDetails = {
       'username': _usernameController.text.trim(),
@@ -60,9 +59,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } else {
         print('Failed to save user details');
         print('Error message: ${response.body}');
+        // Show error message to the user
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to save user details'),
+        ));
       }
     } catch (error) {
       print('Error: $error');
+      // Show error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Error saving user details'),
+      ));
     }
   }
 
@@ -90,7 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _saveUserDetails(responseData['localId']);
         // Navigate to Home Screen after successful login with the user ID
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => HomeScreen(),
+          builder: (context) => LoginScreen(),
         ));
       } else {
         print('Sign up failed');
@@ -199,6 +206,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(height: 20.0),
                       TextField(
                         controller: _ageController,
+                        keyboardType: TextInputType.number,
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: 'Age',

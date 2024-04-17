@@ -1,25 +1,71 @@
+import 'dart:convert';
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
 
 class ForgetPasswordScreen extends StatelessWidget {
   const ForgetPasswordScreen({Key? key});
 
-  void _resetPassword(String email, BuildContext context) async {
+  final apiKey = "AIzaSyD-WktVvIdMXJ6kV99h92PYFRhUQ_1xNmQ";
+
+  Future<void> _resetPassword(String email, BuildContext context) async {
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      // Show a success message or navigate to another screen
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Password reset email sent. Check your inbox.'),
-        ),
+      final checkUserUrl = Uri.parse(
+          'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=$apiKey');
+      final response = await http.post(
+        checkUserUrl,
+        body: json.encode({
+          'email': [email],
+        }),
+        headers: {'Content-Type': 'application/json'},
       );
+
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200 &&
+          responseData['users'] != null &&
+          responseData['users'].isNotEmpty) {
+        // Email exists, send password reset email
+        final url = Uri.parse(
+            'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=$apiKey');
+        final resetResponse = await http.post(
+          url,
+          body: json.encode({
+            'requestType': 'PASSWORD_RESET',
+            'email': email,
+          }),
+          headers: {'Content-Type': 'application/json'},
+        );
+
+        if (resetResponse.statusCode == 200) {
+          // Show a success message or navigate to another screen
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Password reset email sent. Check your inbox.'),
+            ),
+          );
+        } else {
+          // Handle errors
+          print('Error sending password reset email: ${resetResponse.body}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error sending password reset email.'),
+            ),
+          );
+        }
+      } else {
+        // Email does not exist
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Email not found. Please enter a registered email address.'),
+          ),
+        );
+      }
     } catch (e) {
-      // Handle errors
-      print('Error sending password reset email: $e');
-      // Show an error message
+      // Handle exceptions
+      print('Exception occurred: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error sending password reset email.'),

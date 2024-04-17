@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
@@ -12,23 +13,31 @@ class UserProfile extends StatefulWidget {
   _UserProfileState createState() => _UserProfileState();
 }
 
+class UserProfileScreen extends StatefulWidget {
+  const UserProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  _UserProfileState createState() => _UserProfileState();
+}
+
 class _UserProfileState extends State<UserProfile> {
   String _username = '';
-  String _bio = '';
-  String _location = '';
-  String _website = '';
+  String _email = '';
+  String _age = '';
+  String _city = '';
+  String _country = '';
   String _joiningDate = '';
-  String _contactDetails = '';
 
   @override
   void initState() {
     super.initState();
-    _fetchUserData(); // Fetch user data when the screen is initialized
+    _fetchUserData();
   }
 
   Future<void> _fetchUserData() async {
-    final userId = ''; // Replace with the user's ID
-    final databaseUrl =
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('userId');
+    final String databaseUrl =
         'https://nextra-71204-default-rtdb.asia-southeast1.firebasedatabase.app/users/$userId.json';
 
     try {
@@ -38,11 +47,11 @@ class _UserProfileState extends State<UserProfile> {
         final userData = json.decode(response.body);
         setState(() {
           _username = userData['username'] ?? '';
-          _bio = userData['bio'] ?? '';
-          _location = userData['location'] ?? '';
-          _website = userData['website'] ?? '';
+          _email = userData['email'] ?? '';
+          _age = userData['age'] ?? '';
+          _city = userData['city'] ?? '';
+          _country = userData['country'] ?? '';
           _joiningDate = userData['joining_date'] ?? '';
-          _contactDetails = userData['contact_details'] ?? '';
         });
       } else {
         print('Failed to fetch user data');
@@ -55,7 +64,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text(
           'User Profile',
@@ -84,123 +93,86 @@ class _UserProfileState extends State<UserProfile> {
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.2),
               ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30.0,
-                  vertical: 20.0,
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 2.0,
-                            ),
-                          ),
-                          child: const ClipOval(
-                            child: CircleAvatar(
-                              radius: 50,
-                              backgroundImage: NetworkImage(
-                                  'https://icons8.com/icon/kDoeg22e5jUY/male-user'),
-                            ),
-                          ),
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: NetworkImage(
+                              'https://toppng.com/public/uploads/preview/user-account-management-logo-user-icon-11562867145a56rus2zwu.png'),
                         ),
-                        const SizedBox(width: 20),
+                        SizedBox(
+                          width: 20,
+                        ),
                         Text(
                           _username,
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: TextStyle(
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Bio',
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Divider(
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'City: $_city',
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    Text(
-                      _bio,
-                      style: const TextStyle(color: Colors.white),
+                    SizedBox(
+                      height: 10,
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Information',
+                    Text(
+                      'Country: $_country',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.white70,
-                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    // Display user information here
-                    // Example:
-                    _buildInfoCard(
-                      icon: Icons.location_on,
-                      title: 'Location',
-                      subtitle: _location,
+                    SizedBox(
+                      height: 10,
                     ),
-                    const SizedBox(height: 10),
-                    _buildInfoCard(
-                      icon: Icons.link,
-                      title: 'Website',
-                      subtitle: _website,
+                    Text(
+                      'Email: $_email',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    _buildInfoCard(
-                      icon: Icons.calendar_today,
-                      title: 'Date of Joining',
-                      subtitle: _joiningDate,
+                    SizedBox(
+                      height: 10,
                     ),
-                    const SizedBox(height: 10),
-                    _buildInfoCard(
-                      icon: Icons.contact_phone,
-                      title: 'Contact Details',
-                      subtitle: _contactDetails,
+                    Text(
+                      'Joining Date: $_joiningDate',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
-                    const SizedBox(height: 10),
                   ],
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildInfoCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-  }) {
-    return Card(
-      color: Colors.blueGrey.withOpacity(0.5),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: Colors.white,
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(color: Colors.white),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: const TextStyle(color: Colors.white),
-        ),
       ),
     );
   }

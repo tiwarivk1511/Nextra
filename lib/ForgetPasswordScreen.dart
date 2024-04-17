@@ -13,19 +13,11 @@ class ForgetPasswordScreen extends StatelessWidget {
   Future<void> _resetPassword(String email, BuildContext context) async {
     try {
       final checkUserUrl = Uri.parse(
-          'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=$apiKey');
-      final response = await http.post(
-        checkUserUrl,
-        body: json.encode({
-          'email': [email],
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
+          'https://nextra-71204-default-rtdb.asia-southeast1.firebasedatabase.app/users.json?orderBy="email"&equalTo="$email"');
+      final response = await http.get(checkUserUrl);
 
       final responseData = json.decode(response.body);
-      if (response.statusCode == 200 &&
-          responseData['users'] != null &&
-          responseData['users'].isNotEmpty) {
+      if (responseData != null && responseData.isNotEmpty) {
         // Email exists, send password reset email
         final url = Uri.parse(
             'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=$apiKey');
@@ -127,8 +119,17 @@ class ForgetPasswordScreen extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Call reset password function
-                          _resetPassword(emailController.text.trim(), context);
+                          if (emailController.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please enter an email.'),
+                              ),
+                            );
+                          } else {
+                            // Call reset password function
+                            _resetPassword(
+                                emailController.text.trim(), context);
+                          }
                         },
                         child: Text('Send OTP'),
                       ),

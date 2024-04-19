@@ -28,12 +28,6 @@ class _UserProfileState extends State<UserProfile> {
   String _country = '';
   String _joiningDate = '';
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserData();
-  }
-
   Future<void> _fetchUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString('userId');
@@ -45,6 +39,7 @@ class _UserProfileState extends State<UserProfile> {
 
       if (response.statusCode == 200) {
         final userData = json.decode(response.body);
+        print('Response: $userData');
         setState(() {
           _username = userData['username'] ?? '';
           _email = userData['email'] ?? '';
@@ -59,6 +54,42 @@ class _UserProfileState extends State<UserProfile> {
     } catch (error) {
       print('Error: $error');
     }
+  }
+
+  // Future<void> getUserInfo() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final String? idToken = prefs.getString('idToken');
+  //
+  //   final url =
+  //       'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD-WktVvIdMXJ6kV99h92PYFRhUQ_1xNmQ';
+  //
+  //   final response = await http.post(
+  //     Uri.parse(url),
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: jsonEncode({'idToken': idToken}),
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     final Map<String, dynamic> responseData = jsonDecode(response.body);
+  //
+  //     setState(() {
+  //       _username = responseData['username'] ?? '';
+  //       _email = responseData['email'] ?? '';
+  //       _age = responseData['age'] ?? '';
+  //       _city = responseData['city'] ?? '';
+  //       _country = responseData['country'] ?? '';
+  //       _joiningDate = responseData['joining_date'] ?? '';
+  //     });
+  //   } else {
+  //     throw Exception('Failed to fetch user information');
+  //   }
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+    // getUserInfo();
   }
 
   @override
@@ -112,13 +143,16 @@ class _UserProfileState extends State<UserProfile> {
                           width: 20,
                         ),
                         Text(
-                          _username,
+                          '$_username',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
+                        Text('$_age',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 18)),
                       ],
                     ),
                     SizedBox(
@@ -126,6 +160,7 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                     Divider(
                       color: Colors.white,
+                      height: 1,
                     ),
                     SizedBox(
                       height: 20,

@@ -105,8 +105,6 @@ class HomeScreen extends StatelessWidget {
             future: getUserInfo(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
                 final Map<String, dynamic> userData = snapshot.data!;

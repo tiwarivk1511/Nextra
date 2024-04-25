@@ -38,15 +38,17 @@ class _UserProfileState extends State<UserProfile> {
       final response = await http.get(Uri.parse(databaseUrl));
 
       if (response.statusCode == 200) {
-        final userData = json.decode(response.body);
-        print('Response: $userData');
+        final userData = json.decode(response.body) as Map<String, dynamic>;
+        final userKey = userData.keys.first;
+        final user = userData[userKey];
+
         setState(() {
-          _username = userData['username'] ?? '';
-          _email = userData['email'] ?? '';
-          _age = userData['age'] ?? '';
-          _city = userData['city'] ?? '';
-          _country = userData['country'] ?? '';
-          _joiningDate = userData['joining_date'] ?? '';
+          _username = user['username'] ?? '';
+          _email = user['email'] ?? '';
+          _age = user['age'] ?? '';
+          _city = user['city'] ?? '';
+          _country = user['country'] ?? '';
+          _joiningDate = user['joining_date'] ?? '';
         });
       } else {
         print('Failed to fetch user data');
@@ -56,40 +58,10 @@ class _UserProfileState extends State<UserProfile> {
     }
   }
 
-  // Future<void> getUserInfo() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   final String? idToken = prefs.getString('idToken');
-  //
-  //   final url =
-  //       'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD-WktVvIdMXJ6kV99h92PYFRhUQ_1xNmQ';
-  //
-  //   final response = await http.post(
-  //     Uri.parse(url),
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: jsonEncode({'idToken': idToken}),
-  //   );
-  //
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> responseData = jsonDecode(response.body);
-  //
-  //     setState(() {
-  //       _username = responseData['username'] ?? '';
-  //       _email = responseData['email'] ?? '';
-  //       _age = responseData['age'] ?? '';
-  //       _city = responseData['city'] ?? '';
-  //       _country = responseData['country'] ?? '';
-  //       _joiningDate = responseData['joining_date'] ?? '';
-  //     });
-  //   } else {
-  //     throw Exception('Failed to fetch user information');
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
     _fetchUserData();
-    // getUserInfo();
   }
 
   @override
@@ -142,17 +114,21 @@ class _UserProfileState extends State<UserProfile> {
                         SizedBox(
                           width: 20,
                         ),
-                        Text(
-                          '$_username',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text('$_age',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18)),
+                        Column(
+                          children: [
+                            Text(
+                              '$_username',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text('Age: $_age Years',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                          ],
+                        )
                       ],
                     ),
                     SizedBox(

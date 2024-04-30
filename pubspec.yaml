@@ -40,6 +40,7 @@ dependencies:
   firebase_auth: ^4.19.1
   firebase_analytics: ^10.10.1
   firebase_database: ^10.5.1
+  google_generative_ai: ^0.3.2
 
 
 dev_dependencies:
@@ -73,6 +74,7 @@ dev_dependencies:
   speech_to_text: ^6.6.0
   googleapis: ^13.1.0
   shared_preferences: ^2.1.6
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

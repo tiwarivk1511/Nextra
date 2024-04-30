@@ -23,27 +23,6 @@ final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 final FirebaseAnalyticsObserver observer =
     FirebaseAnalyticsObserver(analytics: analytics);
 
-Future<Map<String, dynamic>> getUserInfo() async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final String? idToken = prefs.getString('idToken');
-
-  final url =
-      'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD-WktVvIdMXJ6kV99h92PYFRhUQ_1xNmQ';
-
-  final response = await http.post(
-    Uri.parse(url),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'idToken': idToken}),
-  );
-
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> responseData = jsonDecode(response.body);
-    return responseData;
-  } else {
-    throw Exception('Failed to fetch user information');
-  }
-}
-
 // Sign out method
 Future<void> _signOut(BuildContext context) async {
   // Clear authentication token
@@ -58,10 +37,45 @@ Future<void> _signOut(BuildContext context) async {
   );
 }
 
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
 // Home Screen
-class HomeScreen extends StatelessWidget {
+class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  HomeScreen({Key? key}) : super(key: key);
+
+  String email = '';
+  Future<String?> _fetchUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('userId');
+    final String databaseUrl =
+        'https://nextra-71204-default-rtdb.asia-southeast1.firebasedatabase.app/users/$userId.json';
+
+    try {
+      final response = await http.get(Uri.parse(databaseUrl));
+
+      if (response.statusCode == 200) {
+        final userData = json.decode(response.body) as Map<String, dynamic>;
+        final userKey = userData.keys.first;
+        final user = userData[userKey];
+
+        setState(() {
+          email = user['email'] ?? '';
+        });
+        return email;
+      } else {
+        print('Failed to fetch user data');
+        return null;
+      }
+    } catch (error) {
+      print('Error: $error');
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +91,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             // Get the ScaffoldState for the current context
             _scaffoldKey.currentState?.openDrawer();
+            _fetchUserData();
           },
         ),
 
@@ -101,263 +116,241 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-          child: FutureBuilder<Map<String, dynamic>>(
-            future: getUserInfo(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                final Map<String, dynamic> userData = snapshot.data!;
-                final String email = userData['users'][0]['email'];
-
-                return Container(
-                  color: const Color.fromARGB(1, 90, 43, 113).withOpacity(0.5),
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    children: <Widget>[
-                      DrawerHeader(
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(1, 90, 43, 113)
-                              .withOpacity(0.5),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Card(
-                                    margin: const EdgeInsets.only(right: 20),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(80),
-                                    ),
-                                    color: Colors.transparent,
-                                    child: Image.asset(
-                                      'assets/logo.png',
-                                      width: 60,
-                                      height: 60,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Nextra',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ]),
-                            Text(
-                              email,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.home_outlined,
-                            color: Colors.white, size: 30),
-                        title: const Text('Home',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
-                        onTap: () {
-                          // Add functionality for Home
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.document_scanner_outlined,
-                            color: Colors.white, size: 30),
-                        title: const Text('OCR',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
-                        onTap: () {
-                          // navigate to OCR screen
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const OcrScreen(),
-                          ));
-                        },
-                      ),
-
-                      ListTile(
-                        leading: const Icon(Icons.translate,
-                            color: Colors.white, size: 30),
-                        title: const Text('Translation',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
-                        onTap: () {
-                          //navigate to translation screen
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const TranslationScreen(),
-                          ));
-                        },
-                      ),
-
-                      ListTile(
-                        leading: const Icon(Icons.speed,
-                            color: Colors.white, size: 30),
-                        title: const Text('Network Speed Test',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
-                        onTap: () {
-                          //navigate to Network Speed Test
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const NetworkSpeedTest(),
-                          ));
-                        },
-                      ),
-
-                      ListTile(
-                        leading: const Icon(Icons.qr_code_scanner,
-                            color: Colors.white, size: 30),
-                        title: const Text('QR Scanner',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
-                        onTap: () {
-                          //navigate to QR Scanner
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const QRScannerScreen(),
-                          ));
-                        },
-                      ),
-
-                      const SizedBox(
-                        height: 290,
-                      ),
-
-                      const ListTile(
-                        title: Text('More',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
-                        //Disable click
-                        enabled: false,
-                      ),
-                      //bottom navigation section in drawer menu
-                      SizedBox(
-                        width: double.maxFinite,
-                        height: 56,
-                        child: Row(
+          child: Container(
+            color: const Color.fromARGB(1, 90, 43, 113).withOpacity(0.5),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color:
+                        const Color.fromARGB(1, 90, 43, 113).withOpacity(0.5),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Card(
-                                color: Colors.black26,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    //move to terms and conditions screen
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const TermsCondition(),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.text_snippet_outlined,
-                                    color: Colors.white,
-                                  ),
-                                )),
-                            Card(
-                              color: Colors.black26,
+                              margin: const EdgeInsets.only(right: 20),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(80),
                               ),
-                              child: IconButton(
-                                onPressed: () {
-                                  //move to privacy policy screen
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const PrivacyPolicy(),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.privacy_tip_outlined,
-                                  color: Colors.white,
-                                ),
+                              color: Colors.transparent,
+                              child: Image.asset(
+                                'assets/logo.png',
+                                width: 60,
+                                height: 60,
                               ),
                             ),
-
-                            //Developer button
-                            Card(
-                              color: Colors.black26,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: IconButton(
-                                onPressed: () {
-                                  //Navigate to Developer Screen
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        const DeveloperProfileScreen(),
-                                  ));
-                                },
-                                icon: const Icon(
-                                  Icons.developer_mode_outlined,
-                                  color: Colors.white,
-                                ),
+                            Text(
+                              'Nextra',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            //customer support
-                            Card(
-                                color: Colors.black26,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    //move to customer support screen
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => HelpScreen(),
-                                        ));
-                                  },
-                                  icon: const Icon(
-                                    Icons.support_agent_outlined,
-                                    color: Colors.white,
-                                  ),
-                                )),
-
-                            //logout
-                            Card(
-                              color: Colors.black26,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: IconButton(
-                                onPressed: () {
-                                  //exit from application
-                                  _signOut(context);
-                                },
-                                icon: const Icon(
-                                  Icons.logout,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ]),
+                      Text(
+                        email,
+                        style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
-                      // Add more list tiles for other drawer items as needed
                     ],
                   ),
-                );
-              }
-            },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.home_outlined,
+                      color: Colors.white, size: 30),
+                  title: const Text('Home',
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  onTap: () {
+                    // Add functionality for Home
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.document_scanner_outlined,
+                      color: Colors.white, size: 30),
+                  title: const Text('OCR',
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  onTap: () {
+                    // navigate to OCR screen
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const OcrScreen(),
+                    ));
+                  },
+                ),
+
+                ListTile(
+                  leading: const Icon(Icons.translate,
+                      color: Colors.white, size: 30),
+                  title: const Text('Translation',
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  onTap: () {
+                    //navigate to translation screen
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const TranslationScreen(),
+                    ));
+                  },
+                ),
+
+                ListTile(
+                  leading:
+                      const Icon(Icons.speed, color: Colors.white, size: 30),
+                  title: const Text('Network Speed Test',
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  onTap: () {
+                    //navigate to Network Speed Test
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const NetworkSpeedTest(),
+                    ));
+                  },
+                ),
+
+                ListTile(
+                  leading: const Icon(Icons.qr_code_scanner,
+                      color: Colors.white, size: 30),
+                  title: const Text('QR Scanner',
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  onTap: () {
+                    //navigate to QR Scanner
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const QRScannerScreen(),
+                    ));
+                  },
+                ),
+
+                const SizedBox(
+                  height: 290,
+                ),
+
+                const ListTile(
+                  title: Text('More',
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  //Disable click
+                  enabled: false,
+                ),
+                //bottom navigation section in drawer menu
+                SizedBox(
+                  width: double.maxFinite,
+                  height: 56,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Card(
+                          color: Colors.black26,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              //move to terms and conditions screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TermsCondition(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.text_snippet_outlined,
+                              color: Colors.white,
+                            ),
+                          )),
+                      Card(
+                        color: Colors.black26,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            //move to privacy policy screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PrivacyPolicy(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.privacy_tip_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+
+                      //Developer button
+                      Card(
+                        color: Colors.black26,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            //Navigate to Developer Screen
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const DeveloperProfileScreen(),
+                            ));
+                          },
+                          icon: const Icon(
+                            Icons.developer_mode_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      //customer support
+                      Card(
+                          color: Colors.black26,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              //move to customer support screen
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HelpScreen(),
+                                  ));
+                            },
+                            icon: const Icon(
+                              Icons.support_agent_outlined,
+                              color: Colors.white,
+                            ),
+                          )),
+
+                      //logout
+                      Card(
+                        color: Colors.black26,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            //exit from application
+                            _signOut(context);
+                          },
+                          icon: const Icon(
+                            Icons.logout,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Add more list tiles for other drawer items as needed
+              ],
+            ),
           ),
         ),
       ),
+
 //Drawer navigation complete
 
       // Body of the Home screen

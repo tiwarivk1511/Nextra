@@ -64,6 +64,8 @@ class _TalkToBotState extends State<TalkToBot>
   @override
   void dispose() {
     _controller.dispose();
+    // Turn off TTS when the widget is disposed
+    flutterTts.stop();
     super.dispose();
   }
 
@@ -140,6 +142,8 @@ class _TalkToBotState extends State<TalkToBot>
           color: Colors.white,
           onPressed: () {
             Navigator.of(context).pop();
+            //turn off TTS
+            flutterTts.stop();
           },
         ),
       ),
@@ -265,7 +269,8 @@ class _TalkToBotState extends State<TalkToBot>
                                     child: Center(
                                       child: IconButton(
                                         onPressed: () {
-                                          // Add your onPressed logic here
+                                          // turn off TTS
+                                          flutterTts.stop();
                                         },
                                         icon: const Icon(
                                           Icons.close_rounded,

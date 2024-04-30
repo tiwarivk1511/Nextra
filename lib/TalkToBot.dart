@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -11,7 +13,7 @@ class TalkToBot extends StatefulWidget {
   const TalkToBot({Key? key}) : super(key: key);
 
   @override
-  _TalkToBotState createState() => _TalkToBotState();
+  State<TalkToBot> createState() => _TalkToBotState();
 }
 
 class _TalkToBotState extends State<TalkToBot>
@@ -101,27 +103,25 @@ class _TalkToBotState extends State<TalkToBot>
     }
   }
 
-  void _getBotResponse(String query) async {
-    // Simulate processing time
-    Future.delayed(const Duration(seconds: 1), () async {
-      String response;
-      if (query.toLowerCase().contains('hello')) {
-        response = 'Hi there!';
-      } else if (query.toLowerCase().contains('how are you')) {
-        response = 'I am doing well, thank you!';
-      } else if (query.toLowerCase().contains('your name')) {
-        response = 'My name is Bot. How can I assist you?';
-      } else if (query.toLowerCase().contains('bye')) {
-        response = 'Goodbye! Have a great day!';
-      } else {
-        response = 'Sorry, I did not understand that.';
-      }
-      setState(() {
-        _botResponse = response;
-      });
-      await flutterTts.speak(response);
-    });
-  }
+  // void _getBotResponse(String query) async {
+  //   // Simulate processing time
+  //   Future.delayed(const Duration(seconds: 1), () async {
+  //     String response;
+  //     if (query.toLowerCase().contains('your name')) {
+  //       response = 'I am Nextra . How can I assist you?';
+  //     } else if (query.toLowerCase().contains('bye')) {
+  //       response = 'Goodbye! Have a great day!';
+  //     } else {
+  //       Map<String, String> responseMap =
+  //       (await getResponse(query)) as Map<String, String>;
+  //       response = responseMap['text'] ?? '';
+  //     }
+  //     setState(() {
+  //       _botResponse = getResponse(query) as String;
+  //     });
+  //     await flutterTts.speak(response);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -289,5 +289,99 @@ class _TalkToBotState extends State<TalkToBot>
         ),
       ),
     );
+  }
+
+  Future<String> getResponse(String query) async {
+    // Define the request body
+    Map<String, dynamic> requestBody = {
+      "contents": [
+        {
+          "parts": [
+            {"text": query}
+          ]
+        }
+      ]
+    };
+
+    // Convert the request body to JSON
+    String requestBodyJson = jsonEncode(requestBody);
+
+    // Define the API endpoint URL
+    String apiUrl =
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyAmYtafCn4SHCmpPILwaMc_qz_QtZD1g1s';
+
+    try {
+      // Make the HTTP POST request
+      http.Response response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: requestBodyJson,
+      );
+
+      // Check if the request was successful
+      if (response.statusCode == 200) {
+        // Parse the response JSON
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        // Check if the response contains candidates
+        if (responseData.containsKey('candidates') &&
+            responseData['candidates'] is List &&
+            responseData['candidates'].isNotEmpty) {
+          // Extract the text response from the first candidate
+          String textResponse =
+              responseData['candidates'][0]['content']['parts'][0]['text'];
+
+          //if textResponse have Gemini word the replace it to Nextra
+          if (textResponse.contains('Gemini')) {
+            textResponse = textResponse.replaceAll('Gemini', 'Nextra');
+          }
+
+          if (textResponse.contains('Google')) {
+            textResponse =
+                textResponse.replaceAll('Google', 'Vikash Tiwari Sir');
+          }
+
+          print("Response: $textResponse");
+
+          return textResponse;
+        } else {
+          print("No candidates found in the response");
+          throw Exception('Failed to load response');
+        }
+      } else {
+        // If the request was not successful, print the error response
+        print("Error response: ${response.body}");
+        throw Exception('Failed to load response');
+      }
+    } catch (e) {
+      // If an error occurred during the request, print the error
+      print('Error: $e');
+      return '';
+    }
+  }
+
+  void _getBotResponse(String query) async {
+    try {
+      // Simulate processing time
+      await Future.delayed(const Duration(seconds: 1));
+
+      String response;
+      if (query.toLowerCase().contains('your name')) {
+        response = 'I am Nextra. How can I assist you?';
+      } else if (query.toLowerCase().contains('bye')) {
+        response = 'Goodbye! Have a great day!';
+      } else {
+        String generatedResponse = await getResponse(query);
+        response = generatedResponse ?? '';
+      }
+
+      setState(() {
+        _botResponse = response;
+      });
+
+      await flutterTts.speak(response);
+    } catch (e) {
+      print('Error in _getBotResponse: $e');
+    }
   }
 }

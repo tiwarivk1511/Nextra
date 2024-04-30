@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
 import 'package:nextra/DeveloperProfile.dart';
 import 'package:nextra/HelpScreen.dart';
@@ -47,6 +48,14 @@ class HomeScreen extends StatefulWidget {
 // Home Screen
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FlutterTts flutterTts = FlutterTts();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+    flutterTts.stop();
+  }
 
   String email = '';
   Future<String?> _fetchUserData() async {

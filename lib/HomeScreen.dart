@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
+import 'package:nextra/ChatWithBotScreen.dart';
 import 'package:nextra/DeveloperProfile.dart';
 import 'package:nextra/HelpScreen.dart';
 import 'package:nextra/NetworkSpeedTestScreen.dart';
@@ -538,34 +539,41 @@ class _HomeScreenState extends State<HomeScreen> {
 //making it clickable
                                         child: InkWell(
                                           onTap: () {
-// Show an Alert Dialog
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: const Text(
-                                                    "Chat with Bot",
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  content: const Text(
-                                                      "This is the content of the dialog."),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(); // Close the dialog
-                                                      },
-                                                      child:
-                                                          const Text('Close'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
+
+// Navigate to the TalkToBot screen
+                                            Navigator.push(
+                                              context, MaterialPageRoute(
+                                                builder: (context) => ChatWithBotScreen(),
+                                              )
                                             );
+// Show an Alert Dialog
+//                                             showDialog(
+//                                               context: context,
+//                                               builder: (BuildContext context) {
+//                                                 return AlertDialog(
+//                                                   title: const Text(
+//                                                     "Chat with Bot",
+//                                                     style: TextStyle(
+//                                                       fontSize: 20,
+//                                                       fontWeight:
+//                                                           FontWeight.bold,
+//                                                     ),
+//                                                   ),
+//                                                   content: const Text(
+//                                                       "This is the content of the dialog."),
+//                                                   actions: <Widget>[
+//                                                     TextButton(
+//                                                       onPressed: () {
+//                                                         Navigator.of(context)
+//                                                             .pop(); // Close the dialog
+//                                                       },
+//                                                       child:
+//                                                           const Text('Close'),
+//                                                     ),
+//                                                   ],
+//                                                 );
+//                                               },
+//                                             );
                                           },
                                           child: Card(
                                             color: Colors.deepPurpleAccent,

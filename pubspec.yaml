@@ -74,8 +74,9 @@ dev_dependencies:
   speech_to_text: ^6.6.0
   googleapis: ^13.1.0
   shared_preferences: ^2.1.6
-
-
+  share: ^2.0.4
+  image: ^4.1.7
+  image_gallery_saver: ^2.0.3
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

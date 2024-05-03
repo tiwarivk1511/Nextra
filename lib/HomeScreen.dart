@@ -12,6 +12,7 @@ import 'package:nextra/HelpScreen.dart';
 import 'package:nextra/NetworkSpeedTestScreen.dart';
 import 'package:nextra/OcrScreen.dart';
 import 'package:nextra/QrScanner.dart';
+import 'package:nextra/SearchWithImage.dart';
 import 'package:nextra/TalkToBot.dart';
 import 'package:nextra/TranslationScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -539,13 +540,13 @@ class _HomeScreenState extends State<HomeScreen> {
 //making it clickable
                                         child: InkWell(
                                           onTap: () {
-
 // Navigate to the TalkToBot screen
                                             Navigator.push(
-                                              context, MaterialPageRoute(
-                                                builder: (context) => ChatWithBotScreen(),
-                                              )
-                                            );
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatWithBotScreen(),
+                                                ));
 // Show an Alert Dialog
 //                                             showDialog(
 //                                               context: context,
@@ -638,34 +639,41 @@ class _HomeScreenState extends State<HomeScreen> {
 //making it clickable
                                         child: InkWell(
                                           onTap: () {
+// Navigate to the SearchWithImage screen
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SearchWithImageScreen(),
+                                                ));
 // Show an Alert Dialog
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: const Text(
-                                                    "Search with Image",
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  content: const Text(
-                                                      "This is the content of the dialog."),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(); // Close the dialog
-                                                      },
-                                                      child:
-                                                          const Text('Close'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
+//                                             showDialog(
+//                                               context: context,
+//                                               builder: (BuildContext context) {
+//                                                 return AlertDialog(
+//                                                   title: const Text(
+//                                                     "Search with Image",
+//                                                     style: TextStyle(
+//                                                       fontSize: 20,
+//                                                       fontWeight:
+//                                                           FontWeight.bold,
+//                                                     ),
+//                                                   ),
+//                                                   content: const Text(
+//                                                       "This is the content of the dialog."),
+//                                                   actions: <Widget>[
+//                                                     TextButton(
+//                                                       onPressed: () {
+//                                                         Navigator.of(context)
+//                                                             .pop(); // Close the dialog
+//                                                       },
+//                                                       child:
+//                                                           const Text('Close'),
+//                                                     ),
+//                                                   ],
+//                                                 );
+//                                               },
+//                                             );
                                           },
 //add contents
                                           child: Card(

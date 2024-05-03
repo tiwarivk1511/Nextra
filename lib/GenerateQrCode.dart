@@ -28,7 +28,7 @@ class _GenerateQRState extends State<GenerateQR> {
     ];
 
     final Map<Permission, PermissionStatus> permissionStatus =
-    await permissionsToRequest.request();
+        await permissionsToRequest.request();
 
     if (permissionStatus[Permission.camera]!.isDenied ||
         permissionStatus[Permission.storage]!.isDenied) {
@@ -99,7 +99,7 @@ class _GenerateQRState extends State<GenerateQR> {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content:
-                          Text('Please enter text to generate QR code.'),
+                              Text('Please enter text to generate QR code.'),
                         ));
                       } else {
                         Navigator.of(context).push(MaterialPageRoute(
@@ -152,7 +152,8 @@ class GeneratedQrCodeScreen extends StatelessWidget {
         ),
         title: const Text(
           'Your Generated QR Code',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: Stack(
@@ -171,7 +172,8 @@ class GeneratedQrCodeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 QrCodeScreen(text: text).buildQrCode(),
-                SizedBox(width: 20), // Add spacing between the QR code and buttons
+                SizedBox(
+                    width: 20), // Add spacing between the QR code and buttons
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -193,6 +195,7 @@ class GeneratedQrCodeScreen extends StatelessWidget {
     );
   }
 }
+
 class QrCodeScreen {
   final String text;
 

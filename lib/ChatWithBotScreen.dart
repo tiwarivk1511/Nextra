@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,6 +15,7 @@ class ChatWithBotScreen extends StatefulWidget {
 class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
   final TextEditingController _textController = TextEditingController();
   final List<ChatMessage> _messages = <ChatMessage>[];
+  late String response;
 
   @override
   void dispose() {
@@ -107,7 +109,6 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
       // Simulate processing time
       await Future.delayed(const Duration(seconds: 1));
 
-      String response;
       if (query.toLowerCase().contains('your name')) {
         response = 'I am Nextra. How can I assist you?';
       } else if (query.toLowerCase().contains('bye')) {
@@ -127,6 +128,13 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
     } catch (e) {
       print('Error in _getBotResponse: $e');
     }
+  }
+
+  void copyToClipboard() async {
+    await Clipboard.setData(ClipboardData(text: response));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Translated text copied to clipboard')),
+    );
   }
 
   @override
@@ -248,12 +256,26 @@ class ChatMessage extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: isUser ? Colors.white : Colors.black,
-                  fontSize: 16.0,
-                ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        color: isUser ? Colors.white : Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                  if (!isUser)
+                    IconButton(
+                      icon: Icon(Icons.content_copy),
+                      onPressed: () {
+                        _copyToClipboard(context);
+                      },
+                    ),
+                ],
               ),
             ),
           ),
@@ -266,6 +288,13 @@ class ChatMessage extends StatelessWidget {
               : Container(), // User's avatar
         ],
       ),
+    );
+  }
+
+  void _copyToClipboard(BuildContext context) async {
+    await Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Response copied to clipboard')),
     );
   }
 }

@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:translator/translator.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:translator/translator.dart';
 
 class TranslationScreen extends StatefulWidget {
   const TranslationScreen({super.key});
@@ -23,7 +23,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
   FlutterTts flutterTts = FlutterTts();
   List<Map<String, String>> languages = [
     // Your language list here
-    {'code': 'auto_awesome', 'name': 'Auto Awesome'},
+    {'code': 'Select Language', 'name': 'Select Language'},
     {'code': 'af', 'name': 'Afrikaans'},
     {'code': 'sq', 'name': 'Albanian'},
     {'code': 'am', 'name': 'Amharic'},
@@ -36,7 +36,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
     {'code': 'eu', 'name': 'Basque'},
     {'code': 'be', 'name': 'Belarusian'},
     {'code': 'bn', 'name': 'Bengali'},
-    {'code': 'bh', 'name': 'Bhojpuri'},
+// {'code': 'bh', 'name': 'Bhojpuri'}, // Unwritable
     {'code': 'bs', 'name': 'Bosnian'},
     {'code': 'bg', 'name': 'Bulgarian'},
     {'code': 'ca', 'name': 'Catalan'},
@@ -49,7 +49,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
     {'code': 'cs', 'name': 'Czech'},
     {'code': 'da', 'name': 'Danish'},
     {'code': 'dv', 'name': 'Dhivehi'},
-    {'code': 'doi', 'name': 'Dogri'},
+// {'code': 'doi', 'name': 'Dogri'}, // Unwritable
     {'code': 'nl', 'name': 'Dutch'},
     {'code': 'en', 'name': 'English'},
     {'code': 'eo', 'name': 'Esperanto'},
@@ -70,11 +70,11 @@ class _TranslationScreenState extends State<TranslationScreen> {
     {'code': 'haw', 'name': 'Hawaiian'},
     {'code': 'he', 'name': 'Hebrew'},
     {'code': 'hi', 'name': 'Hindi'},
-    {'code': 'hmn', 'name': 'Hmong'},
+// {'code': 'hmn', 'name': 'Hmong'}, // Unwritable
     {'code': 'hu', 'name': 'Hungarian'},
     {'code': 'is', 'name': 'Icelandic'},
     {'code': 'ig', 'name': 'Igbo'},
-    {'code': 'ilo', 'name': 'Ilocano'},
+// {'code': 'ilo', 'name': 'Ilocano'}, // Unwritable
     {'code': 'id', 'name': 'Indonesian'},
     {'code': 'ga', 'name': 'Irish'},
     {'code': 'it', 'name': 'Italian'},
@@ -84,7 +84,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
     {'code': 'kk', 'name': 'Kazakh'},
     {'code': 'km', 'name': 'Khmer'},
     {'code': 'rw', 'name': 'Kinyarwanda'},
-    {'code': 'kok', 'name': 'Konkani'},
+// {'code': 'kok', 'name': 'Konkani'}, // Unwritable
     {'code': 'ko', 'name': 'Korean'},
     {'code': 'kri', 'name': 'Krio'},
     {'code': 'ku', 'name': 'Kurdish (Kurmanji)'},
@@ -105,7 +105,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
     {'code': 'mt', 'name': 'Maltese'},
     {'code': 'mi', 'name': 'Maori'},
     {'code': 'mr', 'name': 'Marathi'},
-    {'code': 'mni', 'name': 'Meiteilon (Manipuri)'},
+// {'code': 'mni', 'name': 'Meiteilon (Manipuri)'}, // Unwritable
     {'code': 'lus', 'name': 'Mizo'},
     {'code': 'mn', 'name': 'Mongolian'},
     {'code': 'my', 'name': 'Myanmar (Burmese)'},
@@ -157,7 +157,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
     {'code': 'yi', 'name': 'Yiddish'},
     {'code': 'yo', 'name': 'Yoruba'},
     {'code': 'zu', 'name': 'Zulu'},
-    // Add all other languages here
+// Add all other languages here
   ];
 
   @override
@@ -200,8 +200,8 @@ class _TranslationScreenState extends State<TranslationScreen> {
     }
   }
 
-
-  translateText(String originalLanguage, String destinationLanguage, String inputText) async {
+  translateText(String originalLanguage, String destinationLanguage,
+      String inputText) async {
     // Check if originalLanguage is not selected
     if (originalLanguage.isEmpty) {
       setState(() {
@@ -211,12 +211,12 @@ class _TranslationScreenState extends State<TranslationScreen> {
     }
 
     GoogleTranslator translator = GoogleTranslator();
-    var translated = await translator.translate(inputText, from: originalLanguage, to: destinationLanguage);
+    var translated = await translator.translate(inputText,
+        from: originalLanguage, to: destinationLanguage);
     setState(() {
       translatedText = translated.toString();
     });
   }
-
 
   void copyToClipboard() async {
     await Clipboard.setData(ClipboardData(text: translatedText));
@@ -288,10 +288,9 @@ class _TranslationScreenState extends State<TranslationScreen> {
                               const Text(
                                 'Translate From',
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blueGrey
-                                ),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueGrey),
                               ),
                               const SizedBox(height: 20),
                               DropdownButtonFormField<String>(
@@ -307,37 +306,50 @@ class _TranslationScreenState extends State<TranslationScreen> {
                                     setState(() {
                                       originalLanguage = newValue;
                                     });
-                                    translateText(getLanguageCode(originalLanguage), getLanguageCode(destinationLanguage), inputText);
+                                    translateText(
+                                        getLanguageCode(originalLanguage),
+                                        getLanguageCode(destinationLanguage),
+                                        inputText);
                                   }
                                 },
                                 items: languages
                                     .map<DropdownMenuItem<String>>((language) {
                                   return DropdownMenuItem<String>(
                                     value: language['name']!,
-                                    child: Text(language['name']!,style: const TextStyle(color: Colors.blueGrey),),
+                                    child: Text(
+                                      language['name']!,
+                                      style: const TextStyle(
+                                          color: Colors.blueGrey),
+                                    ),
                                   );
                                 }).toList(),
                               ),
                               const SizedBox(height: 10),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        // Swap the selected languages
-                                        String temp = originalLanguage;
-                                        originalLanguage = destinationLanguage;
-                                        destinationLanguage = temp;
-                                      });
-                                      // Translate the text with the new selected languages
-                                      translateText(getLanguageCode(originalLanguage), getLanguageCode(destinationLanguage), inputText);
-                                    },
-                                    icon: const Icon(Icons.swap_vert,color: Colors.blueGrey,), // You can use any icon here
-                                  ),
-
-                                ]
-                              ),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          // Swap the selected languages
+                                          String temp = originalLanguage;
+                                          originalLanguage =
+                                              destinationLanguage;
+                                          destinationLanguage = temp;
+                                        });
+                                        // Translate the text with the new selected languages
+                                        translateText(
+                                            getLanguageCode(originalLanguage),
+                                            getLanguageCode(
+                                                destinationLanguage),
+                                            inputText);
+                                      },
+                                      icon: const Icon(
+                                        Icons.swap_vert,
+                                        color: Colors.blueGrey,
+                                      ), // You can use any icon here
+                                    ),
+                                  ]),
                               DropdownButtonFormField<String>(
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
@@ -351,14 +363,21 @@ class _TranslationScreenState extends State<TranslationScreen> {
                                     setState(() {
                                       destinationLanguage = newValue;
                                     });
-                                    translateText(getLanguageCode(originalLanguage), getLanguageCode(destinationLanguage), inputText);
+                                    translateText(
+                                        getLanguageCode(originalLanguage),
+                                        getLanguageCode(destinationLanguage),
+                                        inputText);
                                   }
                                 },
                                 items: languages
                                     .map<DropdownMenuItem<String>>((language) {
                                   return DropdownMenuItem<String>(
                                     value: language['name']!,
-                                    child: Text(language['name']!,style: const TextStyle(color: Colors.blueGrey),),
+                                    child: Text(
+                                      language['name']!,
+                                      style: const TextStyle(
+                                          color: Colors.blueGrey),
+                                    ),
                                   );
                                 }).toList(),
                               ),
@@ -386,15 +405,14 @@ class _TranslationScreenState extends State<TranslationScreen> {
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(16),
                       errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.red,
-                        )
-                      ),
-                        errorStyle: TextStyle(color: Colors.red),
+                          borderSide: BorderSide(
+                        color: Colors.red,
+                      )),
+                      errorStyle: TextStyle(color: Colors.red),
                     ),
                     controller: textEditingController,
-                    validator: (value){
-                      if(value == null || value.isEmpty){
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
                         return 'Please enter some text to Translate ';
                       }
                       return null;
@@ -412,11 +430,15 @@ class _TranslationScreenState extends State<TranslationScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), // Adjust the sigmaX and sigmaY values for the desired blur effect
+                        filter: ImageFilter.blur(
+                            sigmaX: 5,
+                            sigmaY:
+                                5), // Adjust the sigmaX and sigmaY values for the desired blur effect
                         child: Container(
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1), // Adjust the opacity as needed
+                            color: Colors.white.withOpacity(
+                                0.1), // Adjust the opacity as needed
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
@@ -430,33 +452,47 @@ class _TranslationScreenState extends State<TranslationScreen> {
                                         getLanguageCode(originalLanguage),
                                         getLanguageCode(destinationLanguage),
                                         textEditingController.text.toString());
-
                                   },
-                                  icon: const Icon(Icons.translate, color: Colors.blueGrey,),
-                                  label: const Text('Translate', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),),
+                                  icon: const Icon(
+                                    Icons.translate,
+                                    color: Colors.blueGrey,
+                                  ),
+                                  label: const Text(
+                                    'Translate',
+                                    style: TextStyle(
+                                        color: Colors.blueGrey,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color.fromRGBO(165, 67, 137, 1).withOpacity(0.5),
+                                    backgroundColor:
+                                        const Color.fromRGBO(165, 67, 137, 1)
+                                            .withOpacity(0.5),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                  )
-                              ),
+                                  )),
 
 // Button for copying to clipboard
                               ElevatedButton.icon(
                                   autofocus: true,
                                   onPressed: copyToClipboard,
-                                  icon: const Icon(Icons.copy, color: Colors.blueGrey),
-                                  label: const Text('Copy to Clipboard', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),),
+                                  icon: const Icon(Icons.copy,
+                                      color: Colors.blueGrey),
+                                  label: const Text(
+                                    'Copy to Clipboard',
+                                    style: TextStyle(
+                                        color: Colors.blueGrey,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color.fromRGBO(165, 67, 137, 1).withOpacity(0.5),
+                                    backgroundColor:
+                                        const Color.fromRGBO(165, 67, 137, 1)
+                                            .withOpacity(0.5),
                                     padding: const EdgeInsets.all(8),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                  )
-                              ),
-
+                                  )),
                             ],
                           ),
                         ),
@@ -511,10 +547,18 @@ class _TranslationScreenState extends State<TranslationScreen> {
                                 // Button for speaking translated text
                                 ElevatedButton.icon(
                                   onPressed: speakTranslatedText,
-                                  icon: const Icon(Icons.volume_up, color: Colors.blueGrey),
-                                  label: const Text('Speak', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),),
+                                  icon: const Icon(Icons.volume_up,
+                                      color: Colors.blueGrey),
+                                  label: const Text(
+                                    'Speak',
+                                    style: TextStyle(
+                                        color: Colors.blueGrey,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color.fromRGBO(165, 67, 137, 1).withOpacity(0.5),
+                                    backgroundColor:
+                                        const Color.fromRGBO(165, 67, 137, 1)
+                                            .withOpacity(0.5),
                                     padding: const EdgeInsets.all(8),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),

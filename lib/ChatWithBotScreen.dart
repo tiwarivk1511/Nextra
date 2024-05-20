@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:nextra/API_Holder.dart';
 
 class ChatWithBotScreen extends StatefulWidget {
   @override
@@ -49,10 +50,10 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
 
     // Convert the request body to JSON
     String requestBodyJson = jsonEncode(requestBody);
-
+    final String ApiKey = API_Holder.apiKey;
     // Define the API endpoint URL
     String apiUrl =
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyAmYtafCn4SHCmpPILwaMc_qz_QtZD1g1s';
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$ApiKey';
 
     try {
       // Make the HTTP POST request

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:nextra/API_Holder.dart';
 import 'package:nextra/SignupScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late final String idToken;
+  final apiKey = API_Holder.apiKey;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
@@ -48,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Perform login using Firebase REST API
       final response = await http.post(
         Uri.parse(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD-WktVvIdMXJ6kV99h92PYFRhUQ_1xNmQ'),
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$apiKey'),
         body: {
           'email': _emailController.text.trim(),
           'password': _passwordController.text.trim(),

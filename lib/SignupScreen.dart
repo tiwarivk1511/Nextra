@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:nextra/API_Holder.dart';
 import 'package:nextra/LoginScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
-  final apiKey = "AIzaSyD-WktVvIdMXJ6kV99h92PYFRhUQ_1xNmQ";
+  final apiKey = API_Holder.apiKey;
   final projectId = "nextra-71204";
 
   bool _passwordVisible = false;

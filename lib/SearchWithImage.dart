@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -26,7 +27,8 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
     if (image == null) {
       throw Exception('Image not provided');
     }
-    final visionUrl = Uri.parse('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyA5hreMG7aCscqpLoOL_f3mwh4MC62DjNk');
+    final visionUrl = Uri.parse(
+        'https://vision.googleapis.com/v1/images:annotate?key=YOUR_API_KEY_HERE');
     final request = {
       'requests': [
         {
@@ -92,7 +94,8 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
     try {
       final botResponse = await _sendRequest(text, image);
       setState(() {
-        _messages.insert(0, ChatMessage(text: text, isUser: true, image: image));
+        _messages.insert(
+            0, ChatMessage(text: text, isUser: true, image: image));
         _messages.insert(0, ChatMessage(text: botResponse, isUser: false));
         _image = null;
       });
@@ -134,11 +137,8 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
         ),
         SizedBox(height: 8.0),
         _image != null
-            ? Container(
-          height: 100.0,
-          width: 100.0,
-          child: Image.file(_image!),
-        )
+            ? Image.file(_image!,
+                height: 100.0, width: 100.0, fit: BoxFit.cover)
             : Container(),
       ],
     );
@@ -217,20 +217,19 @@ class ChatMessage extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
       child: Row(
         mainAxisAlignment:
-        isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           isUser
               ? Container()
               : CircleAvatar(
-            radius: 20.0,
-            child: Icon(Icons.account_circle),
-          ),
+                  radius: 20.0,
+                  child: Icon(Icons.account_circle),
+                ),
           SizedBox(width: 8.0),
           Column(
-            crossAxisAlignment: isUser
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.start,
+            crossAxisAlignment:
+                isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
               if (image != null) Image.file(image!, width: 100, height: 100),
               Container(
@@ -252,9 +251,9 @@ class ChatMessage extends StatelessWidget {
           SizedBox(width: 8.0),
           isUser
               ? CircleAvatar(
-            radius: 20.0,
-            child: Icon(Icons.account_circle),
-          )
+                  radius: 20.0,
+                  child: Icon(Icons.account_circle),
+                )
               : Container(),
         ],
       ),

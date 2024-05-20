@@ -15,6 +15,7 @@ class Assets {
   static const String assetsTaliboot = 'assets/taliboot.png';
   static const String assetsTechImg = 'assets/techImg.png';
   static const String generatedAssets = 'lib/generated/assets.dart';
+  static const String libAPIHolder = 'lib/API_Holder.dart';
   static const String libChatWithBotScreen = 'lib/ChatWithBotScreen.dart';
   static const String libDeveloperProfile = 'lib/DeveloperProfile.dart';
   static const String libForgetPasswordScreen = 'lib/ForgetPasswordScreen.dart';

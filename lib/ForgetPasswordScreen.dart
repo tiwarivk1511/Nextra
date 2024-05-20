@@ -4,11 +4,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:nextra/API_Holder.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
-  const ForgetPasswordScreen({Key? key});
+  ForgetPasswordScreen({Key? key});
 
-  final apiKey = "AIzaSyD-WktVvIdMXJ6kV99h92PYFRhUQ_1xNmQ";
+  final apiKey = API_Holder.apiKey;
 
   Future<void> _resetPassword(String email, BuildContext context) async {
     try {

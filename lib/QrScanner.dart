@@ -3,19 +3,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:wifi_iot/wifi_iot.dart';
-import 'package:video_player/video_player.dart';
 import 'package:simple_vcard_parser/simple_vcard_parser.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:video_player/video_player.dart';
+import 'package:wifi_iot/wifi_iot.dart';
 
 import 'GenerateQrCode.dart';
 
 class QRScannerScreen extends StatefulWidget {
-  const QRScannerScreen({super.key});
+  const QRScannerScreen({Key? key}) : super(key: key);
 
   @override
   _QRScannerScreenState createState() => _QRScannerScreenState();
@@ -24,7 +24,6 @@ class QRScannerScreen extends StatefulWidget {
 class _QRScannerScreenState extends State<QRScannerScreen> {
   File? _selectedImage;
   String _scannedData = '';
-
 
   @override
   void initState() {
@@ -61,82 +60,58 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       _selectedImage = File(pickedImage.path);
       scanQRCode(_selectedImage!.path);
     });
-
   }
-
 
   void handleQRData(String data) {
     if (data.startsWith('http://') || data.startsWith('https://')) {
-      // Open a web link
       openLink(data);
     } else if (data.startsWith('mailto:')) {
-      // Send an email
       sendEmail(data);
     } else if (data.startsWith('tel:')) {
-      // Make a phone call
       makePhoneCall(data);
     } else if (data.startsWith('sms:')) {
-      // Send an SMS
       sendSMS(data);
     } else if (data.startsWith('BEGIN:VCARD')) {
-      // Handle vCard
       handleVCard(data);
     } else if (data.startsWith('whatsapp://')) {
-      // Open WhatsApp
       openWhatsApp(data);
     } else if (data.startsWith('WIFI:')) {
-      // Connect to Wi-Fi
       connectToWiFi(data);
     } else if (data.startsWith('https://www.paypal.com/')) {
-      // Open PayPal link
       openPayPal(data);
     } else if (data.startsWith('BEGIN:VEVENT')) {
-      // Handle event data
       handleEvent(data);
     } else if (data.toLowerCase().endsWith('.pdf')) {
-      // Open PDF file
       openPDF(data);
     } else if (data.startsWith('market://')) {
-      // Open app in Play Store
       openAppInPlayStore(data);
     } else if (data.startsWith('https://play.google.com/store/apps/')) {
-      // Open app in Play Store
       openAppInPlayStore(data);
     } else if (data.startsWith('https://apps.apple.com/')) {
-      // Open app in App Store
       openAppInAppStore(data);
     } else if (data.startsWith('geo:')) {
-      // Open location in Maps
       openLocationInMaps(data);
     } else if (data.startsWith('smsto:')) {
-      // Send SMS to number
       sendSMSToNumber(data);
     } else if (data.toLowerCase().endsWith('.jpg') ||
         data.toLowerCase().endsWith('.png')) {
-      // Open image
       openImage(data);
     } else if (data.toLowerCase().endsWith('.mp4') ||
         data.toLowerCase().endsWith('.mov')) {
-      // Open video
       openVideo(data);
     } else if (data.toLowerCase().contains('facebook.com') ||
         data.toLowerCase().contains('twitter.com')) {
-      // Open social media link
       openSocialMedia(data);
     } else {
-      // Unsupported data type
       showUnsupportedDataTypeMessage();
     }
   }
 
   void openLink(String url) {
-    // Implement logic to open web link
     launch(Uri.parse(url) as String);
   }
 
   void sendEmail(String email) {
-    // Implement logic to send email
-
     final Uri emailUri = Uri(
       scheme: 'mailto',
       path: email,
@@ -149,11 +124,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   }
 
   void makePhoneCall(String phoneNumber) {
-    // Implement logic to make phone call
+    launch('tel:$phoneNumber');
   }
 
   void sendSMS(String phoneNumber) {
-    // Implement logic to send SMS
+    launch('sms:$phoneNumber');
   }
 
   void handleVCard(String vCardData) {
@@ -165,7 +140,6 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       String address = vCard.typedAddress[0].value;
       String url = vCard.typedURL[0].value;
 
-      // Show all details in a dialog with a button to copy to clipboard & a call button
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -207,84 +181,86 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   }
 
   void openWhatsApp(String phoneNumber) {
-    // Implement logic to open WhatsApp
-    String url = 'https://api.whatsapp.com/send?phone=$phoneNumber';
+    launch('https://api.whatsapp.com/send?phone=$phoneNumber');
   }
 
   void connectToWiFi(String wifiData) async {
     WiFiForIoTPlugin.connect(wifiData);
   }
 
-
-  void openPayPal(String UPILink) {
-    // Implement logic to open UPI link
-    launch(UPILink);
+  void openPayPal(String url) async {
+    // Check if the PayPal app is installed
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      // If PayPal app is not installed, provide fallback action
+      // For example, you can launch PayPal website or show a message
+      launch('https://www.paypal.com/');
+    }
   }
 
   void handleEvent(String eventData) {
-    // Implement logic to handle event data
     var eventDataList = eventData.split(':');
     var eventType = eventDataList[0];
     var eventDetails = eventDataList[1];
-
+    // Handle event data
   }
 
   void openPDF(String pdfLink) {
-    // Implement logic to open PDF file
-    launch(Uri.encodeFull(pdfLink), forceSafariVC: false, universalLinksOnly: false);
+    launch(Uri.encodeFull(pdfLink),
+        forceSafariVC: false, universalLinksOnly: false);
   }
 
   void openAppInPlayStore(String appLink) {
-    // Implement logic to open app in Play Store
-    launch(Uri.encodeFull('https://play.google.com/store/apps/details?id=$appLink'), forceSafariVC: false, universalLinksOnly: false);
+    launch(
+        Uri.encodeFull(
+            'https://play.google.com/store/apps/details?id=$appLink'),
+        forceSafariVC: false,
+        universalLinksOnly: false);
   }
 
   void openAppInAppStore(String appLink) {
-    // Implement logic to open app in App Store
-    launch(Uri.encodeFull('https://itunes.apple.com/app/id$appLink'), forceSafariVC: false, universalLinksOnly: false);
+    launch(Uri.encodeFull('https://itunes.apple.com/app/id$appLink'),
+        forceSafariVC: false, universalLinksOnly: false);
   }
 
   void openLocationInMaps(String locationData) {
-    // Implement logic to open location in Maps
-    final Uri mapsUri = Uri.parse('https://maps.google.com/maps?q=$locationData');
+    final Uri mapsUri =
+        Uri.parse('https://maps.google.com/maps?q=$locationData');
+    launch(mapsUri.toString());
   }
 
   void sendSMSToNumber(String smsData) {
-    // Implement logic to send SMS to number
     final Uri smsUri = Uri.parse('sms:${smsData.replaceFirst('smsto:', '')}');
     launch(smsUri.toString());
   }
 
   void openImage(String imageUrl) {
-    // Implement logic to open image
     launch(imageUrl);
   }
 
-
-    // Implement logic to open video
   void openVideo(String url) async {
-    VideoPlayerController videoPlayerController = VideoPlayerController.network(url);
+    VideoPlayerController videoPlayerController =
+        VideoPlayerController.network(url);
     await videoPlayerController.initialize();
     await showModalBottomSheet(
-      context: context,
-      builder: (context) => VideoPlayer(videoPlayerController)
-    );
+        context: context,
+        builder: (context) => VideoPlayer(videoPlayerController));
     videoPlayerController.dispose();
-    }
+  }
 
   void openSocialMedia(String socialMediaLink) {
-    // Implement logic to open social media link
     launch(socialMediaLink);
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showUnsupportedDataTypeMessage() {
-    // Implement logic to show message for unsupported data type
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+      showUnsupportedDataTypeMessage() {
     return ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
           'Unsupported data type. Please try again with a different QR code.',
-        )
-      )
+        ),
+      ),
     );
   }
 
@@ -334,7 +310,6 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Your QR scanner UI components here
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -350,16 +325,15 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                       ),
                     ],
                   ),
-
                   ElevatedButton.icon(
-                    onPressed: () =>  Navigator.of(context).push(MaterialPageRoute(
+                    onPressed: () =>
+                        Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const GenerateQR(),
                     )),
-                      icon: const Icon(Icons.qr_code_2_outlined),
+                    icon: const Icon(Icons.qr_code_2_outlined),
                     label: const Text('Generate QR code'),
                   ),
                   const SizedBox(height: 20),
-                  // Display the selected image if needed
                   if (_selectedImage != null) Image.file(_selectedImage!),
                 ],
               ),
@@ -372,8 +346,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   Future<void> _scanQRCodeFromCamera() async {
     try {
-      final String result = await FlutterBarcodeScanner.scanBarcode('#FF6666', 'Cancel', true, ScanMode.QR);
-      if(!mounted) return;
+      final String result = await FlutterBarcodeScanner.scanBarcode(
+          '#FF6666', 'Cancel', true, ScanMode.QR);
+      if (!mounted) return;
       setState(() {
         _scannedData = result.toString();
       });
@@ -389,35 +364,18 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     }
   }
 
-  //scan code logic
-  Future<void> scanQR() async{
-    // try {
-    //   final String result = await FlutterBarcodeScanner.scanBarcode('#FF6666', 'Cancel', true, ScanMode.QR);
-    //   if(!mounted) return;
-    //   setState(() {
-    //     this._scannedData = result.toString();
-    //   });
-    // }on PlatformException {
-    //   setState(() {
-    //     this._scannedData = 'Failed to get platform version.';
-    //   });
-    // }
-  }
-
-  Future<void> scanQRCode(String ImagePath) async{
+  Future<void> scanQRCode(String imagePath) async {
     try {
-      final String result = ImagePath;
-      if(!mounted) return;
+      final String result = imagePath;
+      if (!mounted) return;
       setState(() {
         _scannedData = result.toString();
       });
-    }on PlatformException {
+      handleQRData(result);
+    } on PlatformException {
       setState(() {
         _scannedData = 'Failed to get platform version.';
       });
     }
   }
-
-
-
 }

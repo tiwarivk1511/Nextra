@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:nextra/API_Holder.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SearchWithImageScreen extends StatefulWidget {
   const SearchWithImageScreen({super.key});
@@ -97,10 +99,11 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
       Map<String, dynamic>? response = await getResponse(query, image);
 
       if (response != null) {
-        String textResponse = _parseWebDetection(response);
+        List<TextSpan> textResponse = _parseWebDetection(response);
         ChatMessage botMessage = ChatMessage(
-          text: textResponse,
+          textSpans: textResponse,
           isUser: false,
+          text: response['responses'][0]['textAnnotations'][0]['description'],
         );
 
         setState(() {
@@ -112,49 +115,73 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
     }
   }
 
-  String _parseWebDetection(Map<String, dynamic> responseData) {
+  List<TextSpan> _parseWebDetection(Map<String, dynamic> responseData) {
+    List<TextSpan> spans = [];
+
     if (responseData.containsKey('responses') &&
         responseData['responses'].isNotEmpty &&
         responseData['responses'][0].containsKey('webDetection')) {
       Map<String, dynamic> webDetection =
           responseData['responses'][0]['webDetection'];
 
-      List<String> results = [];
-
       // Extract web entities
       if (webDetection.containsKey('webEntities')) {
-        results.add("Web Entities:");
+        spans.add(TextSpan(
+            text: "Web Entities:\n",
+            style: TextStyle(fontWeight: FontWeight.bold)));
         for (var entity in webDetection['webEntities']) {
           if (entity.containsKey('description')) {
-            results.add(entity['description']);
+            spans.add(TextSpan(text: entity['description'] + "\n"));
           }
         }
       }
 
       // Extract full matching images
       if (webDetection.containsKey('fullMatchingImages')) {
-        results.add("\nFull Matching Images:");
+        spans.add(TextSpan(
+            text: "\nFull Matching Images:\n",
+            style: TextStyle(fontWeight: FontWeight.bold)));
         for (var image in webDetection['fullMatchingImages']) {
           if (image.containsKey('url')) {
-            results.add(image['url']);
+            spans.add(TextSpan(
+              text: image['url'] + "\n",
+              style: TextStyle(color: Colors.blue),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () async {
+                  if (await canLaunch(image['url'])) {
+                    await launch(image['url']);
+                  }
+                },
+            ));
           }
         }
       }
 
       // Extract pages with matching images
       if (webDetection.containsKey('pagesWithMatchingImages')) {
-        results.add("\nPages with Matching Images:");
+        spans.add(TextSpan(
+            text: "\nPages with Matching Images:\n",
+            style: TextStyle(fontWeight: FontWeight.bold)));
         for (var page in webDetection['pagesWithMatchingImages']) {
           if (page.containsKey('url')) {
-            results.add(page['url']);
+            spans.add(TextSpan(
+              text: page['url'] + "\n",
+              style: TextStyle(color: Colors.blue),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () async {
+                  if (await canLaunch(page['url'])) {
+                    await launch(page['url']);
+                  }
+                },
+            ));
           }
         }
       }
-
-      return results.join("\n");
     } else {
-      return 'No web detection results found.';
+      spans.add(TextSpan(text: 'No web detection results found.'));
     }
+
+    return spans;
   }
 
   Future<void> _getImage(ImageSource source) async {
@@ -302,12 +329,14 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
 
 class ChatMessage extends StatelessWidget {
   final String text;
+  final List<TextSpan> textSpans;
   final bool isUser;
   final File? image;
 
   const ChatMessage({
     super.key,
     required this.text,
+    this.textSpans = const [],
     required this.isUser,
     this.image,
   });
@@ -357,13 +386,17 @@ class ChatMessage extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                  Text(
-                    text,
-                    style: TextStyle(
-                      color: isUser ? Colors.white : Colors.black,
-                      fontSize: 16.0,
-                    ),
-                  ),
+                  textSpans.isNotEmpty
+                      ? RichText(
+                          text: TextSpan(children: textSpans),
+                        )
+                      : Text(
+                          text,
+                          style: TextStyle(
+                            color: isUser ? Colors.white : Colors.black,
+                            fontSize: 16.0,
+                          ),
+                        ),
                 ],
               ),
             ),

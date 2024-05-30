@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share/share.dart';
 
 class GenerateQR extends StatefulWidget {
   const GenerateQR({super.key});
@@ -137,6 +140,81 @@ class GeneratedQrCodeScreen extends StatelessWidget {
 
   const GeneratedQrCodeScreen({super.key, required this.text});
 
+  Future<void> _shareQrCode(BuildContext context, String text) async {
+    try {
+      final directory = (await getApplicationDocumentsDirectory()).path;
+      final filePath = '$directory/qr_code.png';
+
+      // Generate QR code as an image
+      final qrValidationResult = QrValidator.validate(
+        data: text,
+        version: QrVersions.auto,
+        errorCorrectionLevel: QrErrorCorrectLevel.Q,
+      );
+      final qrCode = qrValidationResult.qrCode;
+      final painter = QrPainter.withQr(
+        qr: qrCode!,
+        color: const Color(0xFF000000),
+        emptyColor: const Color(0xFFFFFFFF),
+        gapless: true,
+        embeddedImageStyle: null,
+        embeddedImage: null,
+      );
+
+      // Save QR code as image file
+      final image =
+          await painter.toImageData(2048, format: ImageByteFormat.png);
+      final buffer = image!.buffer.asUint8List();
+      final file = File(filePath);
+      await file.writeAsBytes(buffer);
+
+      // Share the QR code
+      await Share.shareFiles([filePath], text: 'Check out this QR code!');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error sharing QR code: $e')),
+      );
+    }
+  }
+
+  Future<void> _saveQrCode(BuildContext context, String text) async {
+    try {
+      final directory = (await getApplicationDocumentsDirectory()).path;
+      final filePath = '$directory/qr_code.png';
+
+      // Generate QR code as an image
+      final qrValidationResult = QrValidator.validate(
+        data: text,
+        version: QrVersions.auto,
+        errorCorrectionLevel: QrErrorCorrectLevel.Q,
+      );
+      final qrCode = qrValidationResult.qrCode;
+      final painter = QrPainter.withQr(
+        qr: qrCode!,
+        color: const Color(0xFF000000),
+        emptyColor: const Color(0xFFFFFFFF),
+        gapless: true,
+        embeddedImageStyle: null,
+        embeddedImage: null,
+      );
+
+      // Save QR code as image file
+      final image =
+          await painter.toImageData(2048, format: ImageByteFormat.png);
+      final buffer = image!.buffer.asUint8List();
+      final file = File(filePath);
+      await file.writeAsBytes(buffer);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('QR code saved to documents folder')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving QR code: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,11 +256,11 @@ class GeneratedQrCodeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => _shareQrCode(context, text),
                       child: const Text('Share QR'),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => _saveQrCode(context, text),
                       child: const Text('Save QR'),
                     ),
                   ],

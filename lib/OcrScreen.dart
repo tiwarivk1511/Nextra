@@ -6,10 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class OcrScreen extends StatefulWidget {
-  const OcrScreen({Key? key}) : super(key: key);
+  const OcrScreen({super.key});
 
   @override
   _OcrScreenState createState() => _OcrScreenState();
@@ -79,7 +78,7 @@ class _OcrScreenState extends State<OcrScreen> {
     } catch (e) {
       print('Error performing OCR: $e');
       setState(() {
-        _detectedText = 'Error: Failed to perform OCR' + e.toString();
+        _detectedText = 'Error: Failed to perform OCR$e';
       });
     }
   }

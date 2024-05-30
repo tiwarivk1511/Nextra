@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:nextra/API_Holder.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
-  ForgetPasswordScreen({Key? key});
+  ForgetPasswordScreen({super.key});
 
   final apiKey = API_Holder.apiKey;
 
@@ -34,7 +34,7 @@ class ForgetPasswordScreen extends StatelessWidget {
         if (resetResponse.statusCode == 200) {
           // Show a success message or navigate to another screen
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Password reset email sent. Check your inbox.'),
             ),
           );
@@ -42,7 +42,7 @@ class ForgetPasswordScreen extends StatelessWidget {
           // Handle errors
           print('Error sending password reset email: ${resetResponse.body}');
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Error sending password reset email.'),
             ),
           );
@@ -50,7 +50,7 @@ class ForgetPasswordScreen extends StatelessWidget {
       } else {
         // Email does not exist
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text(
                 'Email not found. Please enter a registered email address.'),
           ),
@@ -60,7 +60,7 @@ class ForgetPasswordScreen extends StatelessWidget {
       // Handle exceptions
       print('Exception occurred: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Error sending password reset email.'),
         ),
       );
@@ -89,13 +89,13 @@ class ForgetPasswordScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Image(
+                    const Image(
                       image: AssetImage('assets/logo.png'),
                       width: 80,
                       height: 80,
                     ),
-                    SizedBox(height: 20.0),
-                    Text(
+                    const SizedBox(height: 20.0),
+                    const Text(
                       'Forget Password',
                       style: TextStyle(
                         color: Colors.white,
@@ -103,26 +103,26 @@ class ForgetPasswordScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 40.0),
+                    const SizedBox(height: 40.0),
                     TextField(
                       controller: emailController,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintText: 'Enter your email',
-                        hintStyle: TextStyle(color: Colors.white70),
-                        border: OutlineInputBorder(),
+                        hintStyle: const TextStyle(color: Colors.white70),
+                        border: const OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.1),
                       ),
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
                           if (emailController.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Text('Please enter an email.'),
                               ),
                             );
@@ -132,7 +132,24 @@ class ForgetPasswordScreen extends StatelessWidget {
                                 emailController.text.trim(), context);
                           }
                         },
-                        child: Text('Send OTP'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromRGBO(255, 255, 255, 1),
+                          foregroundColor: const Color.fromRGBO(32, 29, 43, 1),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 80, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          'Send Reset E-mail',
+                          style: TextStyle(
+                            color: Color.fromRGBO(32, 29, 43, 1),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ],

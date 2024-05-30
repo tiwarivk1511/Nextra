@@ -367,7 +367,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_barcode_scanner:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_barcode_scanner
       sha256: a4ba37daf9933f451a5e812c753ddd045d6354e4a3280342d895b07fecaab3fa
@@ -383,7 +383,7 @@ packages:
     source: hosted
     version: "1.1.3"
   flutter_internet_speed_test:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_internet_speed_test
       sha256: "278728b06277d84a0719fc9dc8efd9ad514aec4e135b0831619ba5b4bec75700"
@@ -412,7 +412,7 @@ packages:
     source: hosted
     version: "2.0.19"
   flutter_svg:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_svg
       sha256: "7b4ca6cf3304575fe9c8ec64813c8d02ee41d2afe60bcfe0678bcb5375d596a2"
@@ -425,7 +425,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_tts:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_tts
       sha256: aed2a00c48c43af043ed81145fd8503ddd793dafa7088ab137dbef81a703e53d
@@ -446,7 +446,7 @@ packages:
     source: hosted
     version: "0.3.3"
   google_ml_kit:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: google_ml_kit
       sha256: "208c22edf0e6c6621f4e95881e8fd08f602728f5c60ef8d845a817a948555b3e"
@@ -582,7 +582,7 @@ packages:
     source: hosted
     version: "0.15.4"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
@@ -598,7 +598,7 @@ packages:
     source: hosted
     version: "4.0.2"
   image:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: image
       sha256: "4c68bfd5ae83e700b5204c1e74451e7bf3cf750e6843c6e158289cf56bda018e"
@@ -614,7 +614,7 @@ packages:
     source: hosted
     version: "2.0.3"
   image_picker:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: image_picker
       sha256: "33974eca2e87e8b4e3727f1b94fa3abcb25afe80b6bc2c4d449a0e150aedf720"
@@ -798,7 +798,7 @@ packages:
     source: hosted
     version: "1.0.1"
   path_provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: c9e7d3a4cd1410877472158bee69963a4579f78b68c65a2b7d40d1a7a88bb161
@@ -862,7 +862,7 @@ packages:
     source: hosted
     version: "4.2.3"
   permission_handler:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: permission_handler
       sha256: "18bf33f7fefbd812f37e72091a15575e72d5318854877e0e4035a24ac1113ecb"
@@ -950,7 +950,7 @@ packages:
     source: hosted
     version: "3.0.1"
   qr_flutter:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: qr_flutter
       sha256: "5095f0fc6e3f71d08adef8feccc8cea4f12eec18a2e31c2e8d82cb6019f4b097"
@@ -982,7 +982,7 @@ packages:
     source: hosted
     version: "3.4.0"
   shared_preferences:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: shared_preferences
       sha256: d3bbe5553a986e83980916ded2f0b435ef2e1893dfaa29d5a7a790d0eca12180
@@ -1038,7 +1038,7 @@ packages:
     source: hosted
     version: "2.3.2"
   simple_vcard_parser:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: simple_vcard_parser
       sha256: "390f29fa9b9d6bf1847f54dd21c2464b7614e1f59d1e9738ef3ac03686bbb52e"
@@ -1059,7 +1059,7 @@ packages:
     source: hosted
     version: "1.10.0"
   speech_to_text:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: speech_to_text
       sha256: "57fef1d41bdebe298e84842c89bb4ac91f31cdbec7830c8cb1fc6b91d03abd42"
@@ -1123,7 +1123,7 @@ packages:
     source: hosted
     version: "25.2.4"
   syncfusion_flutter_gauges:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: syncfusion_flutter_gauges
       sha256: "24b9666cc7ee2a6e69c907c3abd179a5f5a311bec6efce97920cde0cc370f391"
@@ -1147,7 +1147,7 @@ packages:
     source: hosted
     version: "0.6.1"
   translator:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: translator
       sha256: "03521d194365e758c66444a3b03005733e1daf0cd3de9c63257bf82b1a4e2ba1"
@@ -1171,7 +1171,7 @@ packages:
     source: hosted
     version: "1.3.2"
   url_launcher:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: url_launcher
       sha256: "6ce1e04375be4eed30548f10a315826fd933c1e493206eab82eed01f438c8d2e"
@@ -1275,7 +1275,7 @@ packages:
     source: hosted
     version: "2.1.4"
   video_player:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: video_player
       sha256: db6a72d8f4fd155d0189845678f55ad2fd54b02c10dcafd11c068dbb631286c0
@@ -1331,7 +1331,7 @@ packages:
     source: hosted
     version: "0.5.1"
   wifi_iot:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: wifi_iot
       sha256: "27a9b77ea589f089f94a65c937bcb8e2910e6cf9190583e117b76b8a8d592c03"

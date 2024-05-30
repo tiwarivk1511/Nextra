@@ -10,7 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class TalkToBot extends StatefulWidget {
-  const TalkToBot({Key? key}) : super(key: key);
+  const TalkToBot({super.key});
 
   @override
   State<TalkToBot> createState() => _TalkToBotState();
@@ -336,12 +336,12 @@ class _TalkToBotState extends State<TalkToBot>
           String textResponse =
               responseData['candidates'][0]['content']['parts'][0]['text'];
 
-          //if textResponse have Gemini word the replace it to Nextra
-          if (textResponse.contains('Gemini')) {
-            textResponse = textResponse.replaceAll('Gemini', 'Nextra');
-          }
-
-          if (textResponse.contains('Google')) {
+          // Replace "Gemini" with "Nextra" and keep "Google" intact
+          textResponse = textResponse.replaceAll('Gemini', 'Nextra');
+          // Check if the query contains any reference to the app
+          if (textResponse.contains('Nextra') ||
+              textResponse.toLowerCase().contains('Nextra') ||
+              textResponse.toUpperCase().contains('nextra')) {
             textResponse =
                 textResponse.replaceAll('Google', 'Vikash Tiwari Sir');
           }

@@ -74,7 +74,7 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
             responseData['candidates'].isNotEmpty) {
           // Extract the text response from the first candidate
           String textResponse =
-              responseData['candidates'][0]['content']['parts'][0]['text'];
+          responseData['candidates'][0]['content']['parts'][0]['text'];
 
           //if textResponse have Gemini word the replace it to Nextra
           if (textResponse.contains('Gemini')) {
@@ -181,7 +181,7 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
                   Divider(height: 1.0),
                   Container(
                     decoration:
-                        BoxDecoration(color: Theme.of(context).cardColor),
+                    BoxDecoration(color: Theme.of(context).cardColor),
                     child: _buildTextComposer(),
                   ),
                 ],
@@ -232,15 +232,15 @@ class ChatMessage extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
       child: Row(
         mainAxisAlignment:
-            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           isUser
               ? Container()
               : CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: AssetImage('assets/logo.png'),
-                ), // Bot's avatar
+            radius: 20.0,
+            backgroundImage: AssetImage('assets/logo.png'),
+          ), // Bot's avatar
           SizedBox(width: 8.0),
           Expanded(
             child: Container(
@@ -283,9 +283,9 @@ class ChatMessage extends StatelessWidget {
           SizedBox(width: 8.0),
           isUser
               ? CircleAvatar(
-                  radius: 20.0,
-                  child: Icon(Icons.person, color: Colors.blueGrey),
-                )
+            radius: 20.0,
+            child: Icon(Icons.person, color: Colors.blueGrey),
+          )
               : Container(), // User's avatar
         ],
       ),

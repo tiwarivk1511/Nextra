@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PrivacyPolicy extends StatefulWidget {
-  const PrivacyPolicy({Key? key}) : super(key: key);
+  const PrivacyPolicy({super.key});
 
   @override
   _PrivacyPolicyState createState() => _PrivacyPolicyState();
@@ -178,7 +178,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -186,7 +186,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
         const SizedBox(height: 5),
         Text(
           content,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),

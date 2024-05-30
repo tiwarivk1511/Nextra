@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class GenerateQR extends StatefulWidget {
-  const GenerateQR({Key? key}) : super(key: key);
+  const GenerateQR({super.key});
 
   @override
   _GenerateQRState createState() => _GenerateQRState();
@@ -75,7 +75,7 @@ class _GenerateQRState extends State<GenerateQR> {
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(
               color: Colors.black.withOpacity(0.5),
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -108,8 +108,8 @@ class _GenerateQRState extends State<GenerateQR> {
                         ));
                       }
                     },
-                    icon: Icon(Icons.qr_code_2_rounded),
-                    label: Text('Generate QR'),
+                    icon: const Icon(Icons.qr_code_2_rounded),
+                    label: const Text('Generate QR'),
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.deepPurple,
                       backgroundColor: Colors.white,
@@ -135,7 +135,7 @@ class _GenerateQRState extends State<GenerateQR> {
 class GeneratedQrCodeScreen extends StatelessWidget {
   final String text;
 
-  const GeneratedQrCodeScreen({Key? key, required this.text}) : super(key: key);
+  const GeneratedQrCodeScreen({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -172,18 +172,18 @@ class GeneratedQrCodeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 QrCodeScreen(text: text).buildQrCode(),
-                SizedBox(
+                const SizedBox(
                     width: 20), // Add spacing between the QR code and buttons
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: () {},
-                      child: Text('Share QR'),
+                      child: const Text('Share QR'),
                     ),
                     ElevatedButton(
                       onPressed: () {},
-                      child: Text('Save QR'),
+                      child: const Text('Save QR'),
                     ),
                   ],
                 ),

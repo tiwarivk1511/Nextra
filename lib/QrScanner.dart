@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,7 +15,7 @@ import 'package:simple_vcard_parser/simple_vcard_parser.dart';
 import 'GenerateQrCode.dart';
 
 class QRScannerScreen extends StatefulWidget {
-  const QRScannerScreen({Key? key}) : super(key: key);
+  const QRScannerScreen({super.key});
 
   @override
   _QRScannerScreenState createState() => _QRScannerScreenState();
@@ -172,7 +170,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('VCard Details'),
+            title: const Text('VCard Details'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -192,14 +190,14 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Failed to parse vCard data.'),
+            title: const Text('Error'),
+            content: const Text('Failed to parse vCard data.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -322,7 +320,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(
               color: Colors.black.withOpacity(0.5),
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -332,23 +330,23 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                       _scannedData.isNotEmpty
                           ? _scannedData
                           : 'Scanned data will appear here',
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Your QR scanner UI components here
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton.icon(
                         onPressed: () => _scanQRCodeFromCamera(),
-                        label: Text('Scan QR code'),
-                        icon: Icon(Icons.qr_code_scanner),
+                        label: const Text('Scan QR code'),
+                        icon: const Icon(Icons.qr_code_scanner),
                       ),
                       ElevatedButton.icon(
                         onPressed: _getImageFromGallery,
-                        label: Text('Scan QR code\nfrom gallery'),
-                        icon: Icon(Icons.image_outlined),
+                        label: const Text('Scan QR code\nfrom gallery'),
+                        icon: const Icon(Icons.image_outlined),
                       ),
                     ],
                   ),
@@ -357,10 +355,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                     onPressed: () =>  Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const GenerateQR(),
                     )),
-                      icon: Icon(Icons.qr_code_2_outlined),
-                    label: Text('Generate QR code'),
+                      icon: const Icon(Icons.qr_code_2_outlined),
+                    label: const Text('Generate QR code'),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Display the selected image if needed
                   if (_selectedImage != null) Image.file(_selectedImage!),
                 ],
@@ -377,7 +375,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       final String result = await FlutterBarcodeScanner.scanBarcode('#FF6666', 'Cancel', true, ScanMode.QR);
       if(!mounted) return;
       setState(() {
-        this._scannedData = result.toString();
+        _scannedData = result.toString();
       });
       handleQRData(result);
     } catch (e) {
@@ -411,11 +409,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       final String result = ImagePath;
       if(!mounted) return;
       setState(() {
-        this._scannedData = result.toString();
+        _scannedData = result.toString();
       });
     }on PlatformException {
       setState(() {
-        this._scannedData = 'Failed to get platform version.';
+        _scannedData = 'Failed to get platform version.';
       });
     }
   }

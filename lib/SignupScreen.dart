@@ -9,7 +9,7 @@ import 'package:nextra/API_Holder.dart';
 import 'package:nextra/LoginScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -49,26 +49,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (response.statusCode == 200) {
         print('User details saved successfully');
         //show success message popup
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('User details saved successfully!'),
         ));
         //finish the current screen and navigate to HomeScreen
         Navigator.of(context).pop();
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => const LoginScreen(),
         ));
       } else {
         print('Failed to save user details');
         print('Error message: ${response.body}');
         // Show error message to the user
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Failed to save user details'),
         ));
       }
     } catch (error) {
       print('Error: $error');
       // Show error message to the user
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Error saving user details'),
       ));
     }
@@ -98,7 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _saveUserDetails(responseData['localId']);
         // Navigate to Home Screen after successful login with the user ID
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => const LoginScreen(),
         ));
       } else {
         print('Sign up failed');
@@ -139,14 +139,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: 60.0),
-                      Image(
+                      const SizedBox(height: 60.0),
+                      const Image(
                         image: AssetImage('assets/logo.png'),
                         width: 80,
                         height: 80,
                       ),
-                      SizedBox(height: 20.0),
-                      Text(
+                      const SizedBox(height: 20.0),
+                      const Text(
                         'Sign Up',
                         style: TextStyle(
                           color: Colors.white,
@@ -154,39 +154,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 40.0),
+                      const SizedBox(height: 40.0),
                       TextField(
                         controller: _usernameController,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: 'Username',
-                          hintStyle: TextStyle(color: Colors.white70),
-                          border: OutlineInputBorder(),
+                          hintStyle: const TextStyle(color: Colors.white70),
+                          border: const OutlineInputBorder(),
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.1),
                         ),
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       TextField(
                         controller: _emailController,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: 'Email',
-                          hintStyle: TextStyle(color: Colors.white70),
-                          border: OutlineInputBorder(),
+                          hintStyle: const TextStyle(color: Colors.white70),
+                          border: const OutlineInputBorder(),
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.1),
                         ),
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       TextField(
                         controller: _passwordController,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         obscureText: !_passwordVisible,
                         decoration: InputDecoration(
                           hintText: 'Password',
-                          hintStyle: TextStyle(color: Colors.white70),
-                          border: OutlineInputBorder(),
+                          hintStyle: const TextStyle(color: Colors.white70),
+                          border: const OutlineInputBorder(),
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.1),
                           suffixIcon: IconButton(
@@ -204,71 +204,89 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       TextField(
                         controller: _ageController,
                         keyboardType: TextInputType.number,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: 'Age',
-                          hintStyle: TextStyle(color: Colors.white70),
-                          border: OutlineInputBorder(),
+                          hintStyle: const TextStyle(color: Colors.white70),
+                          border: const OutlineInputBorder(),
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.1),
                         ),
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       TextField(
                         controller: _cityController,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: 'City',
-                          hintStyle: TextStyle(color: Colors.white70),
-                          border: OutlineInputBorder(),
+                          hintStyle: const TextStyle(color: Colors.white70),
+                          border: const OutlineInputBorder(),
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.1),
                         ),
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       TextField(
                         controller: _countryController,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: 'Country',
-                          hintStyle: TextStyle(color: Colors.white70),
-                          border: OutlineInputBorder(),
+                          hintStyle: const TextStyle(color: Colors.white70),
+                          border: const OutlineInputBorder(),
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.1),
                         ),
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: _signUp,
-                          child: Text('Sign Up'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromRGBO(255, 255, 255, 1),
+                            foregroundColor:
+                                const Color.fromRGBO(32, 29, 43, 1),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 60, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: const Text(
+                            'Sign up',
+                            style: TextStyle(
+                              color: Color.fromRGBO(32, 29, 43, 1),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(height: 10.0),
+                      const SizedBox(height: 10.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
+                          const Text(
                             'Already have an account? ',
                             style: TextStyle(color: Colors.white),
                           ),
-                          SizedBox(width: 10.0),
+                          const SizedBox(width: 10.0),
                           GestureDetector(
                             onTap: () {
                               // Navigate to login screen
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => LoginScreen(),
+                                  builder: (context) => const LoginScreen(),
                                 ),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Login',
                               style: TextStyle(
                                 color: Colors.white,

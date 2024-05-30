@@ -24,7 +24,7 @@ import 'UserProfile.dart';
 
 final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 final FirebaseAnalyticsObserver observer =
-    FirebaseAnalyticsObserver(analytics: analytics);
+FirebaseAnalyticsObserver(analytics: analytics);
 
 // Sign out method
 Future<void> _signOut(BuildContext context) async {
@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 DrawerHeader(
                   decoration: BoxDecoration(
                     color:
-                        const Color.fromARGB(1, 90, 43, 113).withOpacity(0.5),
+                    const Color.fromARGB(1, 90, 43, 113).withOpacity(0.5),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 ListTile(
                   leading:
-                      const Icon(Icons.speed, color: Colors.white, size: 30),
+                  const Icon(Icons.speed, color: Colors.white, size: 30),
                   title: const Text('Network Speed Test',
                       style: TextStyle(color: Colors.white, fontSize: 20)),
                   onTap: () {
@@ -305,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             //Navigate to Developer Screen
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  const DeveloperProfileScreen(),
+                              const DeveloperProfileScreen(),
                             ));
                           },
                           icon: const Icon(
@@ -379,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Container(
                   color:
-                      Colors.black.withOpacity(0.8), // Adjust opacity as needed
+                  Colors.black.withOpacity(0.8), // Adjust opacity as needed
                   child: BackdropFilter(
                     filter: ImageFilter.blur(
                         sigmaX: 6.0,
@@ -421,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Column(children: [
                                 Container(
                                   margin:
-                                      const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                  const EdgeInsets.fromLTRB(10, 10, 10, 10),
                                   child: Text(
                                     "${greeting()}\n\nHow I can help you today?",
                                     style: const TextStyle(
@@ -462,7 +462,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                   child: Container(
                                     width:
-                                        MediaQuery.of(context).size.width / 2.1,
+                                    MediaQuery.of(context).size.width / 2.1,
 //align texts in left
                                     alignment: Alignment.centerLeft,
 
@@ -478,7 +478,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     20, 0, 0, 0),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(20),
+                                                  BorderRadius.circular(20),
                                                 ),
                                                 child: const Padding(
                                                   padding: EdgeInsets.all(
@@ -507,8 +507,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           const SizedBox(height: 82),
                                           Container(
                                               width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
+                                                  .size
+                                                  .width /
                                                   2,
                                               height: 80,
                                               margin: const EdgeInsets.fromLTRB(
@@ -518,7 +518,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 style: TextStyle(
                                                     fontSize: 30,
                                                     fontWeight:
-                                                        FontWeight.bold),
+                                                    FontWeight.bold),
                                               ))
                                         ],
                                       ),
@@ -531,7 +531,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //button 2 started
                                 Container(
                                   width:
-                                      MediaQuery.of(context).size.width / 2.1,
+                                  MediaQuery.of(context).size.width / 2.1,
                                   color: Colors.transparent,
                                   child: Column(children: [
                                     SizedBox(
@@ -587,10 +587,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     color: const Color.fromARGB(
                                                         20, 0, 0, 0),
                                                     shape:
-                                                        RoundedRectangleBorder(
+                                                    RoundedRectangleBorder(
                                                       borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
+                                                      BorderRadius.circular(
+                                                          20),
                                                     ),
                                                     child: const Padding(
                                                       padding: EdgeInsets.all(
@@ -633,8 +633,8 @@ class _HomeScreenState extends State<HomeScreen> {
 //button 3
                                     SizedBox(
                                         width:
-                                            MediaQuery.of(context).size.width /
-                                                2.1,
+                                        MediaQuery.of(context).size.width /
+                                            2.1,
                                         height: 120,
 //making it clickable
                                         child: InkWell(
@@ -695,10 +695,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             .fromARGB(
                                                             20, 0, 0, 0),
                                                         shape:
-                                                            RoundedRectangleBorder(
+                                                        RoundedRectangleBorder(
                                                           borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
+                                                          BorderRadius
+                                                              .circular(20),
                                                         ),
                                                         child: const Padding(
                                                           padding: EdgeInsets.all(

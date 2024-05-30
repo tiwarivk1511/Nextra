@@ -7,14 +7,14 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatefulWidget {
-  const UserProfile({Key? key}) : super(key: key);
+  const UserProfile({super.key});
 
   @override
   _UserProfileState createState() => _UserProfileState();
 }
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({Key? key}) : super(key: key);
+  const UserProfileScreen({super.key});
 
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -101,79 +101,79 @@ class _UserProfileState extends State<UserProfile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Row(
                       children: [
-                        CircleAvatar(
+                        const CircleAvatar(
                           radius: 50,
                           backgroundImage: NetworkImage(
                               'https://toppng.com/public/uploads/preview/user-account-management-logo-user-icon-11562867145a56rus2zwu.png'),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         Column(
                           children: [
                             Text(
-                              '$_username',
-                              style: TextStyle(
+                              _username,
+                              style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
                             Text('Age: $_age Years',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 18)),
                           ],
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.white,
                       height: 1,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Text(
                       'City: $_city',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       'Country: $_country',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       'Email: $_email',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       'Joining Date: $_joiningDate',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
                       ),

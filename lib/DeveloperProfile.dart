@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DeveloperProfileScreen extends StatefulWidget {
-  const DeveloperProfileScreen({Key? key}) : super(key: key);
+  const DeveloperProfileScreen({super.key});
 
   @override
   _DeveloperProfileScreenState createState() => _DeveloperProfileScreenState();
@@ -57,7 +57,7 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
 
                   // Profile Image
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Developer Name
                   const Text(
                     'Vikash Tiwari',
@@ -76,7 +76,7 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                       fontSize: 18,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Other Details
                   const Card(
                     elevation: 5,
@@ -107,7 +107,7 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   const Card(
                     elevation: 5,
                     color: Colors.blueGrey,
@@ -146,7 +146,7 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                       fontSize: 18,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   //technology cards
                   const Row(

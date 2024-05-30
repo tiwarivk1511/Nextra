@@ -43,6 +43,25 @@ dependencies:
   google_generative_ai: ^0.3.2
 
 
+  flutter_svg: any
+  http: any
+  url_launcher: any
+  permission_handler: any
+  qr_flutter: any
+  flutter_tts: any
+  shared_preferences: any
+  syncfusion_flutter_gauges: any
+  flutter_internet_speed_test: any
+  image_picker: any
+  google_ml_kit: any
+  flutter_barcode_scanner: any
+  wifi_iot: any
+  video_player: any
+  simple_vcard_parser: any
+  image: any
+  path_provider: any
+  speech_to_text: any
+  translator: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -54,22 +73,17 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^3.0.2
   translator: ^1.0.0
-  flutter_svg: ^2.0.10+1
   flutter_tts: ^4.0.2
   percent_indicator: ^4.2.3
   syncfusion_flutter_gauges: ^25.1.38
   flutter_internet_speed_test: ^1.5.0
   permission_handler: ^11.3.1
-  image_picker: ^1.0.7
   path_provider: ^2.1.2
   qr_flutter: ^4.1.0
   flutter_barcode_scanner: ^2.0.0
   barcode_scan2: ^4.3.0
   url_launcher: ^6.2.5
   share_plus: ^8.0.2
-  wifi_iot: ^0.3.19
-  video_player: ^2.8.4
-  simple_vcard_parser: ^0.2.0
   google_ml_kit: ^0.16.3
   speech_to_text: ^6.6.0
   googleapis: ^13.1.0
@@ -82,6 +96,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+  http: any
 flutter:
   assets:
     - assets/logo.png

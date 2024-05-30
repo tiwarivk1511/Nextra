@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'LandingPage.dart';
 
 Future<FirebaseApp> initializeFirebase() async {
@@ -17,7 +16,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
 }
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key});
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

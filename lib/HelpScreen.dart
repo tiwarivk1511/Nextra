@@ -11,6 +11,8 @@ class HelpScreen extends StatelessWidget {
   final messageController = TextEditingController();
   final subjectController = TextEditingController();
 
+  HelpScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,7 +181,7 @@ class HelpScreen extends StatelessWidget {
     // Construct the mailto link with proper encoding
     String mailToLink = 'mailto:$sendEmailTo'
         '?subject=${Uri.encodeFull(subject)}'
-        '&body=${Uri.encodeFull('Name: $userName \nEmail: $userEmail \n' + '\nMessage: ' + '\n$message')}';
+        '&body=${Uri.encodeFull('Name: $userName \nEmail: $userEmail \n\nMessage: \n$message')}';
 
     // Print the email link (for testing)
     print(mailToLink);

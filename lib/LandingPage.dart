@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nextra/LoginScreen.dart';
 
 class LandingPage extends StatelessWidget {
-  const LandingPage({Key? key});
+  const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class LandingPage extends StatelessWidget {
     return OrientationBuilder(
       builder: (context, orientation) {
         return Scaffold(
-          backgroundColor: Color.fromRGBO(0, 0, 0, 1),
+          backgroundColor: const Color.fromRGBO(0, 0, 0, 1),
           body: Stack(
             fit: StackFit.expand,
             children: [
@@ -71,7 +71,7 @@ class LandingPage extends StatelessWidget {
                         // Navigate to the home screen
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
+                              builder: (context) => const LoginScreen()),
                         );
                       },
                       style: ElevatedButton.styleFrom(

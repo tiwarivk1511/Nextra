@@ -12,6 +12,8 @@ import 'ForgetPasswordScreen.dart';
 import 'HomeScreen.dart'; // Assuming you have a HomeScreen after successful login
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -40,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (userId != null) {
       // User is already logged in, redirect to HomeScreen
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => HomeScreen(),
+        builder: (context) => const HomeScreen(),
       ));
     }
   }
@@ -70,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         // Navigate to HomeScreen after successful login
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => HomeScreen(),
+          builder: (context) => const HomeScreen(),
         ));
       } else {
         // Handle login error
@@ -81,14 +83,14 @@ class _LoginScreenState extends State<LoginScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Login Error'),
+              title: const Text('Login Error'),
               content: Text(errorMessage),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -103,14 +105,14 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Login Error'),
-            content: Text('An error occurred. Please try again later.'),
+            title: const Text('Login Error'),
+            content: const Text('An error occurred. Please try again later.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -139,13 +141,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Image(
+                    const Image(
                       image: AssetImage('assets/logo.png'),
                       width: 80,
                       height: 80,
                     ),
-                    SizedBox(height: 20.0),
-                    Text(
+                    const SizedBox(height: 20.0),
+                    const Text(
                       'Nextra',
                       style: TextStyle(
                         color: Colors.white,
@@ -153,27 +155,27 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 40.0),
+                    const SizedBox(height: 40.0),
                     TextField(
                       controller: _emailController,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintText: 'E-mail',
-                        hintStyle: TextStyle(color: Colors.white70),
-                        border: OutlineInputBorder(),
+                        hintStyle: const TextStyle(color: Colors.white70),
+                        border: const OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.1),
                       ),
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     TextField(
                       controller: _passwordController,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                       obscureText: !_passwordVisible,
                       decoration: InputDecoration(
                         hintText: 'Password',
-                        hintStyle: TextStyle(color: Colors.white70),
-                        border: OutlineInputBorder(),
+                        hintStyle: const TextStyle(color: Colors.white70),
+                        border: const OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.1),
                         suffixIcon: IconButton(
@@ -191,15 +193,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _loginAndStoreToken,
-                        child: Text('Login'),
+                    const SizedBox(height: 20.0),
+                    ElevatedButton(
+                      onPressed: _loginAndStoreToken,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+                        foregroundColor: const Color.fromRGBO(32, 29, 43, 1),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 80, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(
+                          color: Color.fromRGBO(32, 29, 43, 1),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -209,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               builder: (context) => ForgetPasswordScreen(),
                             ));
                           },
-                          child: Text(
+                          child: const Text(
                             'Forget Password?',
                             style: TextStyle(color: Colors.white),
                           ),
@@ -217,10 +232,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => SignUpScreen(),
+                              builder: (context) => const SignUpScreen(),
                             ));
                           },
-                          child: Text(
+                          child: const Text(
                             'Sign up',
                             style: TextStyle(color: Colors.white),
                           ),

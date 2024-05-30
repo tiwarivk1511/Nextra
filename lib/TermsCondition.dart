@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TermsCondition extends StatefulWidget {
-  const TermsCondition({Key? key}) : super(key: key);
+  const TermsCondition({super.key});
 
   @override
   _TermsConditionState createState() => _TermsConditionState();
@@ -171,7 +171,7 @@ class _TermsConditionState extends State<TermsCondition> {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -179,7 +179,7 @@ class _TermsConditionState extends State<TermsCondition> {
         const SizedBox(height: 5),
         Text(
           content,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),

@@ -4,13 +4,10 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:nextra/API_Holder.dart';
-import 'package:path_provider/path_provider.dart';
 
 class SearchWithImageScreen extends StatefulWidget {
   const SearchWithImageScreen({super.key});
@@ -22,8 +19,6 @@ class SearchWithImageScreen extends StatefulWidget {
 class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
   final TextEditingController _textController = TextEditingController();
   final List<ChatMessage> _messages = <ChatMessage>[];
-  late String response;
-  late String textResponse;
   File? _image;
   final picker = ImagePicker();
 
@@ -46,38 +41,30 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
     _getBotResponse(text, image);
   }
 
-  Future<String?> getResponse(String query, File? image) async {
+  Future<Map<String, dynamic>?> getResponse(String query, File? image) async {
     try {
       final String apiKey = API_Holder.apiKey; // Replace with your API key
       final String apiUrl =
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=$apiKey';
+          'https://vision.googleapis.com/v1/images:annotate?key=$apiKey';
 
-      // Initialize the request body
+      // Read image bytes and encode to base64
+      List<int> imageBytes = await image!.readAsBytes();
+      String base64Image = base64Encode(imageBytes);
+
+      // Create request body for web detection
       Map<String, dynamic> requestBody = {
-        "contents": [
+        "requests": [
           {
-            "parts": [
-              {"text": query},
+            "image": {"content": base64Image},
+            "features": [
+              {"type": "WEB_DETECTION"}
             ]
           }
         ]
       };
 
-      // Add image to the request body if available
-      if (image != null) {
-        List<int> imageBytes = await image.readAsBytes();
-        String base64Image = base64Encode(imageBytes);
-
-        // Add base64 image to request body
-        requestBody["contents"][0]["parts"].add({
-          "inline_data": {"mime_type": "image/jpeg", "data": base64Image}
-        });
-      }
-
       // Convert the request body to JSON
       String requestBodyJson = jsonEncode(requestBody);
-
-      print('Request Body: $requestBodyJson'); // Debugging
 
       // Make the HTTP POST request
       http.Response response = await http.post(
@@ -86,27 +73,11 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
         body: requestBodyJson,
       );
 
-      print('Response Status Code: ${response.statusCode}'); // Debugging
-      print('Response Body: ${response.body}'); // Debugging
-
       // Check if the request was successful
       if (response.statusCode == 200) {
         // Parse the response JSON
         Map<String, dynamic> responseData = jsonDecode(response.body);
-
-        // Extract and return the response text
-        if (responseData.containsKey('responses') &&
-            responseData['responses'].isNotEmpty &&
-            responseData['responses'][0].containsKey('content') &&
-            responseData['responses'][0]['content'].isNotEmpty) {
-          String textResponse =
-              responseData['responses'][0]['content'][0]['text'];
-          print('Extracted Text Response: $textResponse'); // Debugging
-          return textResponse;
-        } else {
-          print("Error: 'content' field is missing in the response.");
-          throw Exception('Failed to get valid response');
-        }
+        return responseData;
       } else {
         // If the request was not successful, print the error response
         print("Error response: ${response.body}");
@@ -123,46 +94,66 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
     try {
       await Future.delayed(const Duration(seconds: 1));
 
-      String? generatedResponse;
+      Map<String, dynamic>? response = await getResponse(query, image);
 
-      if (image != null) {
-        // Load the image using the image package
-        final bytes = await image.readAsBytes();
-        final img.Image? originalImage = img.decodeImage(bytes);
+      if (response != null) {
+        String textResponse = _parseWebDetection(response);
+        ChatMessage botMessage = ChatMessage(
+          text: textResponse,
+          isUser: false,
+        );
 
-        if (originalImage != null) {
-          // Example: Convert the image to grayscale
-          final img.Image processedImage = img.grayscale(originalImage);
-
-          // Save the processed image to a temporary file
-          final Directory tempDir = await getTemporaryDirectory();
-          final String tempPath = '${tempDir.path}/temp.jpg';
-          File(tempPath).writeAsBytesSync(img.encodeJpg(processedImage));
-
-          // Pass the processed image path to your API
-          generatedResponse = await getResponse(query, File(tempPath));
-        } else {
-          print("Error: Unable to decode image.");
-          generatedResponse = 'Error: Unable to process image.';
-        }
-      } else {
-        generatedResponse = await getResponse(query, null);
+        setState(() {
+          _messages.insert(0, botMessage);
+        });
       }
-
-      // Convert the response to string
-      String textResponse = generatedResponse ?? 'No response';
-
-      // Update the response
-      ChatMessage botMessage = ChatMessage(
-        text: textResponse,
-        isUser: false,
-      );
-
-      setState(() {
-        _messages.insert(0, botMessage);
-      });
     } catch (e) {
       print('Error in _getBotResponse: $e');
+    }
+  }
+
+  String _parseWebDetection(Map<String, dynamic> responseData) {
+    if (responseData.containsKey('responses') &&
+        responseData['responses'].isNotEmpty &&
+        responseData['responses'][0].containsKey('webDetection')) {
+      Map<String, dynamic> webDetection =
+          responseData['responses'][0]['webDetection'];
+
+      List<String> results = [];
+
+      // Extract web entities
+      if (webDetection.containsKey('webEntities')) {
+        results.add("Web Entities:");
+        for (var entity in webDetection['webEntities']) {
+          if (entity.containsKey('description')) {
+            results.add(entity['description']);
+          }
+        }
+      }
+
+      // Extract full matching images
+      if (webDetection.containsKey('fullMatchingImages')) {
+        results.add("\nFull Matching Images:");
+        for (var image in webDetection['fullMatchingImages']) {
+          if (image.containsKey('url')) {
+            results.add(image['url']);
+          }
+        }
+      }
+
+      // Extract pages with matching images
+      if (webDetection.containsKey('pagesWithMatchingImages')) {
+        results.add("\nPages with Matching Images:");
+        for (var page in webDetection['pagesWithMatchingImages']) {
+          if (page.containsKey('url')) {
+            results.add(page['url']);
+          }
+        }
+      }
+
+      return results.join("\n");
+    } else {
+      return 'No web detection results found.';
     }
   }
 
@@ -357,32 +348,21 @@ class ChatMessage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (image != null)
-                    Image.file(
-                      image!,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          text,
-                          style: TextStyle(
-                            color: isUser ? Colors.white : Colors.black,
-                            fontSize: 16.0,
-                          ),
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Image.file(
+                        image!,
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
                       ),
-                      if (!isUser)
-                        IconButton(
-                          icon: const Icon(Icons.copy, color: Colors.grey),
-                          onPressed: () {
-                            _copyToClipboard(context);
-                          },
-                        ),
-                    ],
+                    ),
+                  Text(
+                    text,
+                    style: TextStyle(
+                      color: isUser ? Colors.white : Colors.black,
+                      fontSize: 16.0,
+                    ),
                   ),
                 ],
               ),
@@ -397,13 +377,6 @@ class ChatMessage extends StatelessWidget {
               : Container(), // User's avatar
         ],
       ),
-    );
-  }
-
-  void _copyToClipboard(BuildContext context) async {
-    await Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Response copied to clipboard')),
     );
   }
 }

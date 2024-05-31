@@ -179,7 +179,8 @@ class _GenerateQRState extends State<GenerateQR> {
                   gapPadding: 10,
                 ),
               ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
             ),
             const SizedBox(height: 10),
             TextField(
@@ -189,7 +190,7 @@ class _GenerateQRState extends State<GenerateQR> {
                 hintText: 'Address',
                 hintStyle: const TextStyle(color: Colors.blueGrey),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueGrey),
+                  borderSide: const BorderSide(color: Colors.blueGrey),
                   borderRadius: BorderRadius.circular(10),
                   gapPadding: 10,
                 ),
@@ -615,7 +616,9 @@ class _GenerateQRState extends State<GenerateQR> {
                   const SizedBox(height: 10),
                   ElevatedButton.icon(
                     onPressed: () {
-                      if (textController.text.isEmpty) {
+                      String LocationData =
+                          "Latitude: $latitude, Longitude: $longitude, Address: $address";
+                      if (LocationData.isEmpty) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content:
@@ -624,7 +627,7 @@ class _GenerateQRState extends State<GenerateQR> {
                       } else {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => GeneratedQrCodeScreen(
-                            text: textController.text,
+                            text: LocationData,
                             dataType: selectedDataType,
                           ),
                         ));

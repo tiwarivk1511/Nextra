@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:nextra/API_Holder.dart';
 
 class ChatWithBotScreen extends StatefulWidget {
+  const ChatWithBotScreen({super.key});
+
   @override
   _ChatWithBotScreenState createState() => _ChatWithBotScreenState();
 }
@@ -151,7 +153,7 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text('Chat with Bot',
+        title: const Text('Chat with Bot',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
       body: Stack(
@@ -172,13 +174,13 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
                 children: <Widget>[
                   Flexible(
                     child: ListView.builder(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       reverse: true,
                       itemCount: _messages.length,
                       itemBuilder: (_, int index) => _messages[index],
                     ),
                   ),
-                  Divider(height: 1.0),
+                  const Divider(height: 1.0),
                   Container(
                     decoration:
                     BoxDecoration(color: Theme.of(context).cardColor),
@@ -195,22 +197,22 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
 
   Widget _buildTextComposer() {
     return IconTheme(
-      data: IconThemeData(color: Colors.white),
+      data: const IconThemeData(color: Colors.white),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           children: <Widget>[
             Flexible(
               child: TextField(
                 controller: _textController,
                 onSubmitted: _handleSubmitted,
-                decoration: InputDecoration.collapsed(
+                decoration: const InputDecoration.collapsed(
                   hintText: 'Enter your message/query',
                 ),
               ),
             ),
             IconButton(
-              icon: Icon(Icons.send, color: Colors.purple),
+              icon: const Icon(Icons.send, color: Colors.purple),
               onPressed: () => _handleSubmitted(_textController.text),
             ),
           ],
@@ -224,12 +226,12 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final bool isUser;
 
-  ChatMessage({required this.text, required this.isUser});
+  const ChatMessage({super.key, required this.text, required this.isUser});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
       child: Row(
         mainAxisAlignment:
         isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -237,14 +239,14 @@ class ChatMessage extends StatelessWidget {
         children: <Widget>[
           isUser
               ? Container()
-              : CircleAvatar(
+              : const CircleAvatar(
             radius: 20.0,
             backgroundImage: AssetImage('assets/logo.png'),
           ), // Bot's avatar
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
               decoration: BoxDecoration(
                 color: isUser ? Colors.blueAccent : Colors.white,
                 borderRadius: BorderRadius.circular(8.0),
@@ -253,7 +255,7 @@ class ChatMessage extends StatelessWidget {
                     color: Colors.grey.withOpacity(0.3),
                     spreadRadius: 1,
                     blurRadius: 2,
-                    offset: Offset(0, 2), // changes position of shadow
+                    offset: const Offset(0, 2), // changes position of shadow
                   ),
                 ],
               ),
@@ -271,7 +273,7 @@ class ChatMessage extends StatelessWidget {
                   ),
                   if (!isUser)
                     IconButton(
-                      icon: Icon(Icons.content_copy),
+                      icon: const Icon(Icons.content_copy),
                       onPressed: () {
                         _copyToClipboard(context);
                       },
@@ -280,9 +282,9 @@ class ChatMessage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
           isUser
-              ? CircleAvatar(
+              ? const CircleAvatar(
             radius: 20.0,
             child: Icon(Icons.person, color: Colors.blueGrey),
           )
@@ -295,7 +297,7 @@ class ChatMessage extends StatelessWidget {
   void _copyToClipboard(BuildContext context) async {
     await Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Response copied to clipboard')),
+      const SnackBar(content: Text('Response copied to clipboard')),
     );
   }
 }

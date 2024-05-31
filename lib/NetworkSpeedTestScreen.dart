@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_internet_speed_test/flutter_internet_speed_test.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:flutter_internet_speed_test/flutter_internet_speed_test.dart';
 
 class NetworkSpeedTest extends StatefulWidget {
   const NetworkSpeedTest({super.key});
@@ -126,7 +127,8 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                       NeedlePointer(
                                         value: displayRate,
                                         enableAnimation: true,
-                                        animationDuration: 1200, // Animation duration in milliseconds
+                                        animationDuration:
+                                            1200, // Animation duration in milliseconds
                                         needleColor: Colors.deepPurpleAccent,
                                         tailStyle: const TailStyle(
                                           borderWidth: 0.5,
@@ -142,8 +144,7 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                       GaugeAnnotation(
                                         widget: Container(
                                           child: Text(
-                                            '${displayRate}' +
-                                                '${unitType}',
+                                            '$displayRate' + unitType,
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 25,
@@ -158,7 +159,7 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                   )
                                 ],
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               Text(
                                 isServiceSelectionInProgress
                                     ? 'Selecting Server....'
@@ -169,17 +170,18 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               ElevatedButton(
                                 onPressed: () {
                                   testingFunction();
                                 },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 23, 243, 255),
+                                ),
                                 child: const Text(
                                   "Start Network Test",
                                   style: TextStyle(color: Colors.black),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color.fromARGB(255, 23, 243, 255),
                                 ),
                               ),
                             ],
@@ -188,7 +190,6 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
                   const Text(
                     "Progress",
@@ -199,28 +200,25 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                     ),
                   ),
                   const SizedBox(height: 10),
-
                   LinearProgressIndicator(
                     value: displayProgress / 100,
                     color: Colors.blue,
                     backgroundColor: Colors.blueGrey.shade300,
                     minHeight: 10,
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.blue),
                     semanticsLabel: 'Linear progress indicator',
                     borderRadius: BorderRadius.circular(10),
                   ),
-
                   Text(
-                    '${displayProgress.toStringAsFixed(2)}' + '%',
-                    style: TextStyle(
+                    displayProgress.toStringAsFixed(2) + '%',
+                    style: const TextStyle(
                       color: Colors.blueGrey,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   Card(
                     color: const Color.fromRGBO(55, 38, 63, 1).withOpacity(0.1),
                     elevation: 4,
@@ -247,12 +245,13 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                             children: [
                               // Add Network Speed Test Results here like Ping, Download Speed, Upload Speed
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   // Add Network Speed Test Results here like Ping, Download Speed, Upload Speed with their corresponding values by using separate columns for each
                                   Column(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Download Speed:',
                                         style: TextStyle(
                                           color: Colors.blueGrey,
@@ -261,9 +260,9 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                         ),
                                       ),
                                       Text(
-                                        '${_downloadRate.toStringAsFixed(2)} ' +
-                                            '${unitType}',
-                                        style: TextStyle(
+                                        '${_downloadRate.toStringAsFixed(2)}' +
+                                            unitType,
+                                        style: const TextStyle(
                                           color: Colors.blueGrey,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
@@ -273,7 +272,7 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                   ),
                                   Column(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Upload Speed:',
                                         style: TextStyle(
                                           color: Colors.blueGrey,
@@ -282,9 +281,9 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                         ),
                                       ),
                                       Text(
-                                        '${_uploadRate.toStringAsFixed(2)}' +
-                                            '${unitType}',
-                                        style: TextStyle(
+                                        _uploadRate.toStringAsFixed(2) +
+                                            unitType,
+                                        style: const TextStyle(
                                           color: Colors.blueGrey,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
@@ -300,7 +299,7 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   )
                 ],
@@ -321,7 +320,6 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
         onStarted: () {
           setState(() {
             isTestingStarted = true;
-
           });
         },
         onCompleted: (TestResult download, TestResult upload) {
@@ -354,7 +352,7 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
           });
         },
         onError: (String errorMessage, String speedTestError) {
-          print('Error: $errorMessage' + ' $speedTestError');
+          print('Error: $errorMessage' ' $speedTestError');
           setState(() {
             isTestingStarted = false;
           });
@@ -368,7 +366,6 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
           setState(() {
             isServiceSelectionInProgress = false;
             if (client != null) {
-
               IPAddress = client.ip;
               ASN = client.asn;
               ISP = client.isp;

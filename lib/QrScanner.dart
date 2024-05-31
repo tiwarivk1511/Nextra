@@ -15,7 +15,7 @@ import 'package:wifi_iot/wifi_iot.dart';
 import 'GenerateQrCode.dart';
 
 class QRScannerScreen extends StatefulWidget {
-  const QRScannerScreen({Key? key}) : super(key: key);
+  const QRScannerScreen({super.key});
 
   @override
   _QRScannerScreenState createState() => _QRScannerScreenState();
@@ -70,7 +70,8 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     } else if (data.startsWith('tel:')) {
       makePhoneCall(data);
     } else if (data.startsWith('sms:')) {
-      sendSMS(data);
+      sendSMS(
+          data.substring(4), "Hello from Flutter!"); // Send SMS with message
     } else if (data.startsWith('BEGIN:VCARD')) {
       handleVCard(data);
     } else if (data.startsWith('whatsapp://')) {
@@ -127,8 +128,18 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     launch('tel:$phoneNumber');
   }
 
-  void sendSMS(String phoneNumber) {
-    launch('sms:$phoneNumber');
+  void sendSMS(String phoneNumber, String message) async {
+    final Uri uri = Uri.parse('sms:$phoneNumber?body=$message');
+
+    try {
+      if (await canLaunch(uri.toString())) {
+        await launch(uri.toString());
+      } else {
+        print('Failed to launch SMS app');
+      }
+    } catch (e) {
+      print('Error launching SMS app: $e');
+    }
   }
 
   void handleVCard(String vCardData) {
@@ -300,38 +311,104 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 40,
-                    child: Text(
-                      _scannedData.isNotEmpty
-                          ? _scannedData
-                          : 'Scanned data will appear here',
-                      style: const TextStyle(color: Colors.white),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Text(
+                        _scannedData.isNotEmpty
+                            ? _scannedData
+                            : 'Scanned data will appear here',
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Row(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ElevatedButton.icon(
-                        onPressed: () => _scanQRCodeFromCamera(),
-                        label: const Text('Scan QR code'),
-                        icon: const Icon(Icons.qr_code_scanner),
+                      Row(
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () => _scanQRCodeFromCamera(),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromRGBO(255, 255, 255, 1),
+                              foregroundColor:
+                                  const Color.fromRGBO(32, 29, 43, 1),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            icon: const Icon(Icons.qr_code_scanner,
+                                color: Color.fromRGBO(32, 29, 43, 1)),
+                            label: const Text(
+                              'Scan QR \ncode',
+                              style: TextStyle(
+                                color: Color.fromRGBO(32, 29, 43, 1),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton.icon(
+                            onPressed: _getImageFromGallery,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromRGBO(255, 255, 255, 1),
+                              foregroundColor:
+                                  const Color.fromRGBO(32, 29, 43, 1),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            icon: const Icon(Icons.image_outlined,
+                                color: Color.fromRGBO(32, 29, 43, 1)),
+                            label: const Text(
+                              'Scan QR code from\ngallery',
+                              style: TextStyle(
+                                color: Color.fromRGBO(32, 29, 43, 1),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                      const SizedBox(height: 20),
                       ElevatedButton.icon(
-                        onPressed: _getImageFromGallery,
-                        label: const Text('Scan QR code\nfrom gallery'),
-                        icon: const Icon(Icons.image_outlined),
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const GenerateQR(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromRGBO(255, 255, 255, 1),
+                          foregroundColor: const Color.fromRGBO(32, 29, 43, 1),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        icon: const Icon(Icons.qr_code_2_outlined,
+                            color: Color.fromRGBO(32, 29, 43, 1)),
+                        label: const Text(
+                          'Generate QR code',
+                          style: TextStyle(
+                            color: Color.fromRGBO(32, 29, 43, 1),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () =>
-                        Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const GenerateQR(),
-                    )),
-                    icon: const Icon(Icons.qr_code_2_outlined),
-                    label: const Text('Generate QR code'),
                   ),
                   const SizedBox(height: 20),
                   if (_selectedImage != null) Image.file(_selectedImage!),

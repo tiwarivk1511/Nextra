@@ -126,7 +126,7 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
 
       // Extract web entities
       if (webDetection.containsKey('webEntities')) {
-        spans.add(TextSpan(
+        spans.add(const TextSpan(
             text: "Web Entities:\n",
             style: TextStyle(fontWeight: FontWeight.bold)));
         for (var entity in webDetection['webEntities']) {
@@ -138,14 +138,14 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
 
       // Extract full matching images
       if (webDetection.containsKey('fullMatchingImages')) {
-        spans.add(TextSpan(
+        spans.add(const TextSpan(
             text: "\nFull Matching Images:\n",
             style: TextStyle(fontWeight: FontWeight.bold)));
         for (var image in webDetection['fullMatchingImages']) {
           if (image.containsKey('url')) {
             spans.add(TextSpan(
               text: image['url'] + "\n",
-              style: TextStyle(color: Colors.blue),
+              style: const TextStyle(color: Colors.blue),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
                   if (await canLaunch(image['url'])) {
@@ -159,14 +159,14 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
 
       // Extract pages with matching images
       if (webDetection.containsKey('pagesWithMatchingImages')) {
-        spans.add(TextSpan(
+        spans.add(const TextSpan(
             text: "\nPages with Matching Images:\n",
             style: TextStyle(fontWeight: FontWeight.bold)));
         for (var page in webDetection['pagesWithMatchingImages']) {
           if (page.containsKey('url')) {
             spans.add(TextSpan(
               text: page['url'] + "\n",
-              style: TextStyle(color: Colors.blue),
+              style: const TextStyle(color: Colors.blue),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
                   if (await canLaunch(page['url'])) {
@@ -178,7 +178,7 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
         }
       }
     } else {
-      spans.add(TextSpan(text: 'No web detection results found.'));
+      spans.add(const TextSpan(text: 'No web detection results found.'));
     }
 
     return spans;

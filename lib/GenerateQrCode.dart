@@ -141,7 +141,7 @@ class _GenerateQRState extends State<GenerateQR> {
             hintText: 'Enter URL to generate QR code',
             hintStyle: const TextStyle(color: Colors.blueGrey),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blueGrey),
+              borderSide: const BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(10),
               gapPadding: 10,
             ),
@@ -159,12 +159,13 @@ class _GenerateQRState extends State<GenerateQR> {
                 hintText: 'Latitude',
                 hintStyle: const TextStyle(color: Colors.blueGrey),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueGrey),
+                  borderSide: const BorderSide(color: Colors.blueGrey),
                   borderRadius: BorderRadius.circular(10),
                   gapPadding: 10,
                 ),
               ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
             ),
             const SizedBox(height: 10),
             TextField(
@@ -174,7 +175,7 @@ class _GenerateQRState extends State<GenerateQR> {
                 hintText: 'Longitude',
                 hintStyle: const TextStyle(color: Colors.blueGrey),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueGrey),
+                  borderSide: const BorderSide(color: Colors.blueGrey),
                   borderRadius: BorderRadius.circular(10),
                   gapPadding: 10,
                 ),
@@ -197,11 +198,22 @@ class _GenerateQRState extends State<GenerateQR> {
               ),
               keyboardType: TextInputType.streetAddress,
             ),
-            IconButton(
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.location_on, color: Colors.white),
               onPressed: _fetchLocation,
-              icon: const Icon(
-                Icons.location_on,
-                color: Colors.blueGrey,
+              label: const Text(
+                'Fetch Location',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueGrey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ),
           ],
@@ -266,7 +278,7 @@ class _GenerateQRState extends State<GenerateQR> {
                 hintText: 'Enter contact name',
                 hintStyle: const TextStyle(color: Colors.blueGrey),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueGrey),
+                  borderSide: const BorderSide(color: Colors.blueGrey),
                   borderRadius: BorderRadius.circular(10),
                   gapPadding: 10,
                 ),
@@ -280,7 +292,7 @@ class _GenerateQRState extends State<GenerateQR> {
                 hintText: 'Enter phone number',
                 hintStyle: const TextStyle(color: Colors.blueGrey),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueGrey),
+                  borderSide: const BorderSide(color: Colors.blueGrey),
                   borderRadius: BorderRadius.circular(10),
                   gapPadding: 10,
                 ),
@@ -294,7 +306,7 @@ class _GenerateQRState extends State<GenerateQR> {
                 hintText: 'Enter email address',
                 hintStyle: const TextStyle(color: Colors.blueGrey),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueGrey),
+                  borderSide: const BorderSide(color: Colors.blueGrey),
                   borderRadius: BorderRadius.circular(10),
                   gapPadding: 10,
                 ),
@@ -311,7 +323,7 @@ class _GenerateQRState extends State<GenerateQR> {
             hintText: 'Enter text to generate QR code',
             hintStyle: const TextStyle(color: Colors.blueGrey),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blueGrey),
+              borderSide: const BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(10),
               gapPadding: 10,
             ),
@@ -328,7 +340,7 @@ class _GenerateQRState extends State<GenerateQR> {
                 hintText: 'Enter recipient phone number',
                 hintStyle: const TextStyle(color: Colors.blueGrey),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueGrey),
+                  borderSide: const BorderSide(color: Colors.blueGrey),
                   borderRadius: BorderRadius.circular(10),
                   gapPadding: 10,
                 ),
@@ -524,7 +536,7 @@ class _GenerateQRState extends State<GenerateQR> {
             hintText: 'Enter text to generate QR code',
             hintStyle: const TextStyle(color: Colors.blueGrey),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blueGrey),
+              borderSide: const BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(10),
               gapPadding: 10,
             ),
@@ -624,6 +636,14 @@ class _GenerateQRState extends State<GenerateQR> {
                           content:
                               Text('Please enter text to generate QR code.'),
                         ));
+                      } else if (selectedDataType ==
+                          '---- Select any option ----') {
+                        // Handle the case when no data type is selected
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                              'Please select a data type.\nEnter the Data in Input Area.'),
+                        ));
                       } else {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => GeneratedQrCodeScreen(
@@ -636,8 +656,13 @@ class _GenerateQRState extends State<GenerateQR> {
                     icon: const Icon(Icons.qr_code_2_rounded),
                     label: const Text('Generate QR'),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.deepPurple,
-                      backgroundColor: Colors.white,
+                      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+                      foregroundColor: const Color.fromRGBO(32, 29, 43, 1),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 80, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
                 ],
@@ -647,11 +672,6 @@ class _GenerateQRState extends State<GenerateQR> {
         ],
       ),
     );
-  }
-
-  String getLocationAddress() {
-    // Implement logic to get location address
-    return 'Location address';
   }
 }
 

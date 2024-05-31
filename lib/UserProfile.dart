@@ -40,7 +40,6 @@ class _UserProfileState extends State<UserProfile> {
         setState(() {
           _username = user['username'] ?? '';
           _email = user['email'] ?? '';
-          _age = user['age'] ?? '';
           _city = user['city'] ?? '';
           _country = user['country'] ?? '';
           _joiningDate = user['joining_date'] ?? '';
@@ -58,7 +57,11 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   String _calculateAge(String dateOfBirthString) {
-    DateTime dateOfBirth = DateTime.parse(dateOfBirthString);
+    if (dateOfBirthString.isEmpty) {
+      return ''; // Return default value for empty input
+    }
+
+    DateTime dateOfBirth = DateTime.tryParse(dateOfBirthString) ?? DateTime.now();
     DateTime currentDate = DateTime.now();
     int age = currentDate.year - dateOfBirth.year;
 
@@ -70,6 +73,7 @@ class _UserProfileState extends State<UserProfile> {
 
     return age.toString();
   }
+
 
   String getFormattedDate(String joiningDate) {
     if (joiningDate.isEmpty) {

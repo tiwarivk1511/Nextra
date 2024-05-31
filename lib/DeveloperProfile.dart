@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DeveloperProfileScreen extends StatefulWidget {
@@ -12,8 +13,24 @@ class DeveloperProfileScreen extends StatefulWidget {
 }
 
 class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
+  final DateTime _startDate = DateTime(2022, 1, 1); // Example start date
+
+  String calculateExperience() {
+    final DateTime currentDate = DateTime.now();
+    final int totalMonths = ((currentDate.year - _startDate.year) * 12) +
+        currentDate.month -
+        _startDate.month;
+
+    final int years = totalMonths ~/ 12;
+    final int months = totalMonths % 12;
+
+    return '$years years ${months > 0 ? '$months months' : ''}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String experience = calculateExperience();
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -51,7 +68,6 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                     const CircleAvatar(
                       radius: 50,
                       backgroundColor: Colors.transparent,
-
                       // Replace with your profile image link
                       backgroundImage: NetworkImage(
                           'https://media.licdn.com/dms/image/D4D03AQFHzBtz16_10w/profile-displayphoto-shrink_200_200/0/1691164256762?e=1717632000&v=beta&t=lLeOvNQfO8nC7DNMKYa-VqAZlgrsLTg1hYDH_q1Bp2o'),
@@ -107,15 +123,15 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Card(
+                    Card(
                       elevation: 5,
                       color: Colors.blueGrey,
                       child: Padding(
-                        padding: EdgeInsets.all(12.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Experience:',
                               style: TextStyle(
                                 color: Colors.white,
@@ -123,10 +139,10 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Text(
-                              '1.3 years',
-                              style: TextStyle(
+                              experience,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                                 fontSize: 16,
@@ -146,7 +162,7 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    //technology cards
+                    // Technology cards
                     const Row(
                       children: [
                         CircleAvatar(
@@ -171,9 +187,7 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 20),
-
                     const Text(
                       'Worked With:',
                       style: TextStyle(
@@ -181,11 +195,10 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
                     ),
-
                     const SizedBox(
                       height: 20,
                     ),
-                    //companies cards
+                    // Companies cards
                     const Row(
                       children: [
                         CircleAvatar(
@@ -210,7 +223,6 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 20),
                     const Text(
                       'Contact with Developer:',
@@ -220,26 +232,93 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      icon:
-                          const Icon(Icons.email_outlined, color: Colors.white),
-                      onPressed: () {
-                        launch('mailto:vikash1511@gmail.com');
-                      },
-                      label: const Text(
-                        'Connect Via Email',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueGrey,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    // Social Media Buttons
+                    Card(
+                        elevation: 5,
+                        color: Colors.blueGrey,
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 20,
                         ),
-                      ),
-                    ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton.icon(
+                                  icon: const FaIcon(FontAwesomeIcons.linkedin,
+                                      color: Colors.white),
+                                  onPressed: () {
+                                    launch(
+                                        'https://in.linkedin.com/in/vikash-tiwari15112000');
+                                  },
+                                  label: const Text(
+                                    'LinkedIn',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton.icon(
+                                  icon: const FaIcon(FontAwesomeIcons.instagram,
+                                      color: Colors.white),
+                                  onPressed: () {
+                                    launch(
+                                        'https://www.instagram.com/tiwari_vk15/');
+                                  },
+                                  label: const Text(
+                                    'Instagram',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.pink,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton.icon(
+                                  icon: FaIcon(FontAwesomeIcons.github,
+                                      color: Colors.white),
+                                  onPressed: () {
+                                    launch('https://github.com/tiwarivk1511');
+                                  },
+                                  label: const Text(
+                                    'GitHub',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ))
                   ],
                 ),
               ),

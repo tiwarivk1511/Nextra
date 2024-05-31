@@ -163,7 +163,6 @@ class _TranslationScreenState extends State<TranslationScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize originalLanguage and destinationLanguage
     if (languages.isNotEmpty) {
       originalLanguage = languages[0]['name']!;
       destinationLanguage = languages[0]['name']!;
@@ -200,16 +199,14 @@ class _TranslationScreenState extends State<TranslationScreen> {
     }
   }
 
-  translateText(String originalLanguage, String destinationLanguage,
-      String inputText) async {
-    // Check if originalLanguage is not selected
+  Future<void> translateText(String originalLanguage,
+      String destinationLanguage, String inputText) async {
     if (originalLanguage.isEmpty) {
       setState(() {
         translatedText = "Please select the original language";
       });
       return;
     }
-
     GoogleTranslator translator = GoogleTranslator();
     var translated = await translator.translate(inputText,
         from: originalLanguage, to: destinationLanguage);
@@ -256,13 +253,13 @@ class _TranslationScreenState extends State<TranslationScreen> {
           Container(
             padding: const EdgeInsets.all(20),
             alignment: Alignment.center,
-            color: const Color.fromARGB(1, 32, 29, 43)
-                .withOpacity(0.9), // Adjust opacity as needed
+            color: const Color.fromARGB(1, 32, 29, 43).withOpacity(0.9),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Translate From Card
                   Card(
                     elevation: 4,
                     color: Colors.transparent,
@@ -273,14 +270,13 @@ class _TranslationScreenState extends State<TranslationScreen> {
                       borderRadius: BorderRadius.circular(10),
                       child: BackdropFilter(
                         filter: ImageFilter.blur(
-                            sigmaX: 5,
-                            sigmaY:
-                                5), // Adjust the sigmaX and sigmaY values for the desired blur effect
+                          sigmaX: 5,
+                          sigmaY: 5,
+                        ),
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(
-                                0.1), // Adjust the opacity as needed
+                            color: Colors.white.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Column(
@@ -288,17 +284,20 @@ class _TranslationScreenState extends State<TranslationScreen> {
                               const Text(
                                 'Translate From',
                                 style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueGrey),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey,
+                                ),
                               ),
                               const SizedBox(height: 20),
+                              // Original Language Dropdown
                               DropdownButtonFormField<String>(
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 12, horizontal: 16),
                                   hintText: 'Select Language',
+                                  hintStyle: TextStyle(color: Colors.white),
                                 ),
                                 value: originalLanguage,
                                 onChanged: (String? newValue) {
@@ -307,9 +306,10 @@ class _TranslationScreenState extends State<TranslationScreen> {
                                       originalLanguage = newValue;
                                     });
                                     translateText(
-                                        getLanguageCode(originalLanguage),
-                                        getLanguageCode(destinationLanguage),
-                                        inputText);
+                                      getLanguageCode(originalLanguage),
+                                      getLanguageCode(destinationLanguage),
+                                      inputText,
+                                    );
                                   }
                                 },
                                 items: languages
@@ -325,37 +325,14 @@ class _TranslationScreenState extends State<TranslationScreen> {
                                 }).toList(),
                               ),
                               const SizedBox(height: 10),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          // Swap the selected languages
-                                          String temp = originalLanguage;
-                                          originalLanguage =
-                                              destinationLanguage;
-                                          destinationLanguage = temp;
-                                        });
-                                        // Translate the text with the new selected languages
-                                        translateText(
-                                            getLanguageCode(originalLanguage),
-                                            getLanguageCode(
-                                                destinationLanguage),
-                                            inputText);
-                                      },
-                                      icon: const Icon(
-                                        Icons.swap_vert,
-                                        color: Colors.blueGrey,
-                                      ), // You can use any icon here
-                                    ),
-                                  ]),
+                              // Destination Language Dropdown
                               DropdownButtonFormField<String>(
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 12, horizontal: 16),
                                   hintText: 'Select Language',
+                                  hintStyle: TextStyle(color: Colors.white),
                                 ),
                                 value: destinationLanguage,
                                 onChanged: (String? newValue) {
@@ -364,9 +341,10 @@ class _TranslationScreenState extends State<TranslationScreen> {
                                       destinationLanguage = newValue;
                                     });
                                     translateText(
-                                        getLanguageCode(originalLanguage),
-                                        getLanguageCode(destinationLanguage),
-                                        inputText);
+                                      getLanguageCode(originalLanguage),
+                                      getLanguageCode(destinationLanguage),
+                                      inputText,
+                                    );
                                   }
                                 },
                                 items: languages
@@ -389,6 +367,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
                   ),
 
                   const SizedBox(height: 20),
+                  // Text Input Field
                   TextFormField(
                     onChanged: (value) {
                       setState(() {
@@ -397,23 +376,21 @@ class _TranslationScreenState extends State<TranslationScreen> {
                     },
                     maxLines: 5,
                     minLines: 3,
-                    style: const TextStyle(
-                        color: Colors.white), // Set text color to white
+                    style: const TextStyle(color: Colors.white),
                     decoration: const InputDecoration(
                       labelText: 'Enter text to translate',
                       labelStyle: TextStyle(color: Colors.white),
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(16),
                       errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.red,
-                      )),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
                       errorStyle: TextStyle(color: Colors.red),
                     ),
                     controller: textEditingController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text to Translate ';
+                        return 'Please enter some text to Translate';
                       }
                       return null;
                     },
@@ -421,6 +398,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
 
                   const SizedBox(height: 20),
 
+                  // Translate and Copy Buttons
                   Card(
                     color: const Color.fromRGBO(55, 38, 63, 1).withOpacity(0.1),
                     elevation: 4,
@@ -431,68 +409,65 @@ class _TranslationScreenState extends State<TranslationScreen> {
                       borderRadius: BorderRadius.circular(10),
                       child: BackdropFilter(
                         filter: ImageFilter.blur(
-                            sigmaX: 5,
-                            sigmaY:
-                                5), // Adjust the sigmaX and sigmaY values for the desired blur effect
+                          sigmaX: 5,
+                          sigmaY: 5,
+                        ),
                         child: Container(
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(
-                                0.1), // Adjust the opacity as needed
+                            color: Colors.white.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              // Add a button with an Icon
-                              // Button for translating text
+                              // Translate Button
                               ElevatedButton.icon(
-                                  onPressed: () async {
-                                    await translateText(
-                                        getLanguageCode(originalLanguage),
-                                        getLanguageCode(destinationLanguage),
-                                        textEditingController.text.toString());
-                                  },
-                                  icon: const Icon(
-                                    Icons.translate,
-                                    color: Colors.blueGrey,
+                                onPressed: () async {
+                                  await translateText(
+                                    getLanguageCode(originalLanguage),
+                                    getLanguageCode(destinationLanguage),
+                                    textEditingController.text.toString(),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.translate,
+                                ),
+                                label: const Text(
+                                  'Translate',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  label: const Text(
-                                    'Translate',
-                                    style: TextStyle(
-                                        color: Colors.blueGrey,
-                                        fontWeight: FontWeight.bold),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.purple.shade300,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromRGBO(165, 67, 137, 1)
-                                            .withOpacity(0.5),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  )),
+                                ),
+                              ),
 
-// Button for copying to clipboard
+                              // Copy Button
                               ElevatedButton.icon(
-                                  autofocus: true,
-                                  onPressed: copyToClipboard,
-                                  icon: const Icon(Icons.copy,
-                                      color: Colors.blueGrey),
-                                  label: const Text(
-                                    'Copy to Clipboard',
-                                    style: TextStyle(
-                                        color: Colors.blueGrey,
-                                        fontWeight: FontWeight.bold),
+                                autofocus: true,
+                                onPressed: copyToClipboard,
+                                icon: const Icon(Icons.copy),
+                                label: const Text(
+                                  'Copy to Clipboard',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromRGBO(165, 67, 137, 1)
-                                            .withOpacity(0.5),
-                                    padding: const EdgeInsets.all(8),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  )),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.purple.shade300,
+                                  padding: const EdgeInsets.all(8),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -500,11 +475,8 @@ class _TranslationScreenState extends State<TranslationScreen> {
                     ),
                   ),
 
-                  //button for translation
+                  // Translated Text
                   const SizedBox(height: 20),
-
-                  // Display translated text
-
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 20),
                     child: Card(
@@ -543,22 +515,20 @@ class _TranslationScreenState extends State<TranslationScreen> {
                                   ),
                                 ),
 
+                                // Speak Button
                                 const SizedBox(height: 10),
-                                // Button for speaking translated text
                                 ElevatedButton.icon(
                                   onPressed: speakTranslatedText,
-                                  icon: const Icon(Icons.volume_up,
-                                      color: Colors.blueGrey),
+                                  icon: const Icon(Icons.volume_up),
                                   label: const Text(
                                     'Speak',
                                     style: TextStyle(
-                                        color: Colors.blueGrey,
-                                        fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromRGBO(165, 67, 137, 1)
-                                            .withOpacity(0.5),
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.purple.shade300,
                                     padding: const EdgeInsets.all(8),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -571,7 +541,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

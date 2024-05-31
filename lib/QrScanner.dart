@@ -330,22 +330,18 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                           ElevatedButton.icon(
                             onPressed: () => _scanQRCodeFromCamera(),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromRGBO(255, 255, 255, 1),
-                              foregroundColor:
-                                  const Color.fromRGBO(32, 29, 43, 1),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.purple.shade300,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            icon: const Icon(Icons.qr_code_scanner,
-                                color: Color.fromRGBO(32, 29, 43, 1)),
+                            icon: const Icon(Icons.qr_code_scanner),
                             label: const Text(
                               'Scan QR \ncode',
                               style: TextStyle(
-                                color: Color.fromRGBO(32, 29, 43, 1),
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -355,22 +351,18 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                           ElevatedButton.icon(
                             onPressed: _getImageFromGallery,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromRGBO(255, 255, 255, 1),
-                              foregroundColor:
-                                  const Color.fromRGBO(32, 29, 43, 1),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.purple.shade300,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            icon: const Icon(Icons.image_outlined,
-                                color: Color.fromRGBO(32, 29, 43, 1)),
+                            icon: const Icon(Icons.image_outlined),
                             label: const Text(
                               'Scan QR code from\ngallery',
                               style: TextStyle(
-                                color: Color.fromRGBO(32, 29, 43, 1),
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -388,21 +380,18 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromRGBO(255, 255, 255, 1),
-                          foregroundColor: const Color.fromRGBO(32, 29, 43, 1),
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.purple.shade300,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        icon: const Icon(Icons.qr_code_2_outlined,
-                            color: Color.fromRGBO(32, 29, 43, 1)),
+                        icon: const Icon(Icons.qr_code_2_outlined),
                         label: const Text(
                           'Generate QR code',
                           style: TextStyle(
-                            color: Color.fromRGBO(32, 29, 43, 1),
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),

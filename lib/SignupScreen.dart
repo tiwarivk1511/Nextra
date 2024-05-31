@@ -5,11 +5,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:nextra/API_Holder.dart';
 import 'package:nextra/LoginScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -19,11 +20,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _dateOfBirthController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
   final apiKey = API_Holder.apiKey;
-  final projectId = "nextra-71204";
 
   bool _passwordVisible = false;
 
@@ -34,7 +34,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final userDetails = {
       'username': _usernameController.text.trim(),
       'email': _emailController.text.trim(),
-      'age': _ageController.text.trim(),
+      'date_of_birth': _dateOfBirthController.text.trim(),
       'city': _cityController.text.trim(),
       'country': _countryController.text.trim(),
       'joining_date': DateTime.now().toString(),
@@ -205,16 +205,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       const SizedBox(height: 20.0),
-                      TextField(
-                        controller: _ageController,
-                        keyboardType: TextInputType.number,
+                      TextFormField(
+                        controller: _dateOfBirthController,
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
-                          hintText: 'Age',
+                          hintText: 'Date of Birth',
                           hintStyle: const TextStyle(color: Colors.white70),
                           border: const OutlineInputBorder(),
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.1),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.calendar_today),
+                            color: Colors.white,
+                            onPressed: () async {
+                              final DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1947),
+                                lastDate: DateTime.now(),
+                              );
+                              if (pickedDate != null) {
+                                setState(() {
+                                  _dateOfBirthController.text =
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(pickedDate);
+                                });
+                              }
+                            },
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20.0),
@@ -267,15 +285,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10.0),
+                      const SizedBox(height: 40.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           const Text(
                             'Already have an account? ',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
-                          const SizedBox(width: 10.0),
+                          const SizedBox(width: 100.0),
                           GestureDetector(
                             onTap: () {
                               // Navigate to login screen
@@ -289,11 +307,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: const Text(
                               'Login',
                               style: TextStyle(
+                                fontSize: 16,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
+                          const SizedBox(
+                            height: 50,
+                          )
                         ],
                       ),
                     ],

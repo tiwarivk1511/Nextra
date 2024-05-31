@@ -171,17 +171,27 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              ElevatedButton(
+                              ElevatedButton.icon(
                                 onPressed: () {
                                   testingFunction();
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
                                       const Color.fromARGB(255, 23, 243, 255),
+                                  foregroundColor:
+                                      const Color.fromARGB(255, 23, 243, 255),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 80, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
-                                child: const Text(
+                                icon: const Icon(Icons.speed,
+                                    size: 30, color: Colors.black),
+                                label: const Text(
                                   "Start Network Test",
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
                                 ),
                               ),
                             ],

@@ -731,10 +731,29 @@ class GeneratedQrCodeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+                        foregroundColor: const Color.fromRGBO(32, 29, 43, 1),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 80, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       onPressed: () => _shareQrCode(context, text),
                       child: const Text('Share QR'),
                     ),
+                    const SizedBox(height: 20),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+                        foregroundColor: const Color.fromRGBO(32, 29, 43, 1),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 80, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       onPressed: () => _saveQrCode(context, text),
                       child: const Text('Save QR'),
                     ),

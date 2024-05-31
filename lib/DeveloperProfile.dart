@@ -13,7 +13,7 @@ class DeveloperProfileScreen extends StatefulWidget {
 }
 
 class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
-  final DateTime _startDate = DateTime(2022, 1, 1); // Example start date
+  final DateTime _startDate = DateTime(2023, 1, 1); // Example start date
 
   String calculateExperience() {
     final DateTime currentDate = DateTime.now();

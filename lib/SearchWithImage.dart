@@ -12,7 +12,7 @@ import 'package:nextra/API_Holder.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SearchWithImageScreen extends StatefulWidget {
-  const SearchWithImageScreen({super.key});
+  const SearchWithImageScreen({Key? key});
 
   @override
   _SearchWithImageScreenState createState() => _SearchWithImageScreenState();
@@ -23,6 +23,7 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   File? _image;
   final picker = ImagePicker();
+  bool _isLoading = false; // Added loading flag
 
   @override
   void dispose() {
@@ -79,6 +80,7 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
       if (response.statusCode == 200) {
         // Parse the response JSON
         Map<String, dynamic> responseData = jsonDecode(response.body);
+        print("API response: $responseData"); // Debug statement
         return responseData;
       } else {
         // If the request was not successful, print the error response
@@ -94,29 +96,55 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
 
   Future<void> _getBotResponse(String query, File? image) async {
     try {
+      setState(() {
+        _isLoading = true; // Set loading flag to true
+      });
+
       await Future.delayed(const Duration(seconds: 1));
 
       Map<String, dynamic>? response = await getResponse(query, image);
 
       if (response != null) {
         List<TextSpan> textResponse = _parseWebDetection(response);
+        String description = _extractDescription(response);
+
         ChatMessage botMessage = ChatMessage(
           textSpans: textResponse,
           isUser: false,
-          text: response['responses'][0]['textAnnotations'][0]['description'],
+          text: description,
         );
 
         setState(() {
           _messages.insert(0, botMessage);
+          _isLoading = false; // Clear loading flag when response received
         });
       }
     } catch (e) {
       print('Error in _getBotResponse: $e');
+      setState(() {
+        _isLoading = false; // Clear loading flag on error
+      });
     }
+  }
+
+  String _extractDescription(Map<String, dynamic> responseData) {
+    try {
+      if (responseData.containsKey('responses') &&
+          responseData['responses'].isNotEmpty &&
+          responseData['responses'][0].containsKey('textAnnotations') &&
+          responseData['responses'][0]['textAnnotations'].isNotEmpty) {
+        return responseData['responses'][0]['textAnnotations'][0]
+            ['description'];
+      }
+    } catch (e) {
+      print('Error extracting description: $e');
+    }
+    return 'No description found.';
   }
 
   List<TextSpan> _parseWebDetection(Map<String, dynamic> responseData) {
     List<TextSpan> spans = [];
+    List<String> imageUrl = [];
 
     if (responseData.containsKey('responses') &&
         responseData['responses'].isNotEmpty &&
@@ -131,54 +159,47 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
             style: TextStyle(fontWeight: FontWeight.bold)));
         for (var entity in webDetection['webEntities']) {
           if (entity.containsKey('description')) {
-            spans.add(TextSpan(text: entity['description'] + "\n"));
+            spans.add(TextSpan(
+              text: entity['description'] + "\n",
+              style: TextStyle(color: Colors.black),
+            ));
           }
         }
       }
 
-      // Extract full matching images
-      if (webDetection.containsKey('fullMatchingImages')) {
+      // Extract visually similar images
+      if (webDetection.containsKey('visuallySimilarImages')) {
         spans.add(const TextSpan(
-            text: "\nFull Matching Images:\n",
+            text: "\nVisually Similar Images:\n",
             style: TextStyle(fontWeight: FontWeight.bold)));
-        for (var image in webDetection['fullMatchingImages']) {
+        for (var image in webDetection['visuallySimilarImages']) {
           if (image.containsKey('url')) {
+            String imageUrlText = image['url'];
+            imageUrl.add(imageUrlText); // Add to imageUrl list
             spans.add(TextSpan(
-              text: image['url'] + "\n",
-              style: const TextStyle(color: Colors.blue),
+              text: imageUrlText + "\n",
+              style: TextStyle(color: Colors.blueAccent),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
-                  if (await canLaunch(image['url'])) {
-                    await launch(image['url']);
-                  }
+                  await launch(imageUrlText);
                 },
             ));
           }
         }
       }
 
-      // Extract pages with matching images
-      if (webDetection.containsKey('pagesWithMatchingImages')) {
-        spans.add(const TextSpan(
-            text: "\nPages with Matching Images:\n",
-            style: TextStyle(fontWeight: FontWeight.bold)));
-        for (var page in webDetection['pagesWithMatchingImages']) {
-          if (page.containsKey('url')) {
-            spans.add(TextSpan(
-              text: page['url'] + "\n",
-              style: const TextStyle(color: Colors.blue),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  if (await canLaunch(page['url'])) {
-                    await launch(page['url']);
-                  }
-                },
-            ));
-          }
-        }
+      // Combine web entities and visually similar images
+      if (spans.isNotEmpty) {
+        spans.add(const TextSpan(text: '\n')); // Add a newline between sections
       }
     } else {
-      spans.add(const TextSpan(text: 'No web detection results found.'));
+      spans.add(const TextSpan(text: 'No web detection results found.\n'));
+    }
+
+    // Add each imageUrl as a separate TextSpan
+    for (String url in imageUrl) {
+      spans.add(TextSpan(
+          text: url + "\n", style: TextStyle(color: Colors.blueAccent)));
     }
 
     return spans;
@@ -229,8 +250,15 @@ class _SearchWithImageScreenState extends State<SearchWithImageScreen> {
                     child: ListView.builder(
                       padding: const EdgeInsets.all(8.0),
                       reverse: true,
-                      itemCount: _messages.length,
-                      itemBuilder: (_, int index) => _messages[index],
+                      itemCount: _messages.length + 1,
+                      itemBuilder: (_, int index) {
+                        if (index == _messages.length) {
+                          return _isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : Container();
+                        }
+                        return _messages[index];
+                      },
                     ),
                   ),
                   const Divider(height: 1.0),
@@ -334,7 +362,7 @@ class ChatMessage extends StatelessWidget {
   final File? image;
 
   const ChatMessage({
-    super.key,
+    Key? key,
     required this.text,
     this.textSpans = const [],
     required this.isUser,
@@ -386,17 +414,18 @@ class ChatMessage extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                  textSpans.isNotEmpty
-                      ? RichText(
-                          text: TextSpan(children: textSpans),
-                        )
-                      : Text(
-                          text,
-                          style: TextStyle(
-                            color: isUser ? Colors.white : Colors.black,
-                            fontSize: 16.0,
-                          ),
-                        ),
+                  if (textSpans.isNotEmpty)
+                    RichText(
+                      text: TextSpan(children: textSpans),
+                    )
+                  else
+                    Text(
+                      text,
+                      style: TextStyle(
+                        color: isUser ? Colors.white : Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
                 ],
               ),
             ),

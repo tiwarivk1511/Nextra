@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io' as io;
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -21,16 +23,53 @@ class GenerateQR extends StatefulWidget {
 }
 
 class _GenerateQRState extends State<GenerateQR> {
-  TextEditingController textController = TextEditingController();
-  TextEditingController latitudeController = TextEditingController();
-  TextEditingController longitudeController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+  final TextEditingController textController = TextEditingController();
+
+  final TextEditingController urlController = TextEditingController();
+
+  final TextEditingController latitudeController = TextEditingController();
+  final TextEditingController longitudeController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController subjectController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
+
+  final TextEditingController contactNameController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController vCardEmailController = TextEditingController();
+
+  final TextEditingController wiFiSSIDController = TextEditingController();
+  final TextEditingController wiFiPasswordController = TextEditingController();
+
+  final TextEditingController socialMediaLinkController =
+      TextEditingController();
+
+  final TextEditingController pdfLinkController = TextEditingController();
+
+  final TextEditingController mp3LinkController = TextEditingController();
+
+  final TextEditingController appStoreLinkController = TextEditingController();
+
+  final TextEditingController imageLinkController = TextEditingController();
+
+  final TextEditingController barcodeDataController = TextEditingController();
+
+  final TextEditingController paymentRecipientController =
+      TextEditingController();
+  final TextEditingController paymentAmountController = TextEditingController();
+  final TextEditingController paymentReferenceController =
+      TextEditingController();
 
   String selectedDataType = '---- Select any option ----';
   String address = '';
   String latitude = '';
   String longitude = '';
 
+  //store the data in an array variable
+  List<String> Qr_data = [];
+
+  // API Key
   String apiKey = API_Holder.mapApiKey;
 
   @override
@@ -120,11 +159,12 @@ class _GenerateQRState extends State<GenerateQR> {
         await permissionsToRequest.request();
 
     if (permissionStatus[Permission.camera]!.isDenied ||
-        permissionStatus[Permission.storage]!.isDenied) {
+        permissionStatus[Permission.storage]!.isDenied ||
+        permissionStatus[Permission.location]!.isDenied) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-              'Camera and storage permissions are required for QR code scanning.'),
+              'Camera, storage, and location permissions are required for QR code generation.'),
           duration: Duration(seconds: 2),
         ),
       );
@@ -135,7 +175,7 @@ class _GenerateQRState extends State<GenerateQR> {
     switch (selectedDataType) {
       case 'URL':
         return TextField(
-          controller: textController,
+          controller: urlController,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Enter URL to generate QR code',
@@ -224,7 +264,7 @@ class _GenerateQRState extends State<GenerateQR> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: textController,
+              controller: emailController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Recipient email address',
@@ -238,7 +278,7 @@ class _GenerateQRState extends State<GenerateQR> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: textController,
+              controller: subjectController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Subject (optional)',
@@ -252,7 +292,7 @@ class _GenerateQRState extends State<GenerateQR> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: textController,
+              controller: messageController,
               style: const TextStyle(color: Colors.white),
               maxLines: 5,
               decoration: InputDecoration(
@@ -272,7 +312,7 @@ class _GenerateQRState extends State<GenerateQR> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: textController,
+              controller: contactNameController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Enter contact name',
@@ -286,7 +326,7 @@ class _GenerateQRState extends State<GenerateQR> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: textController,
+              controller: phoneNumberController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Enter phone number',
@@ -300,7 +340,7 @@ class _GenerateQRState extends State<GenerateQR> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: textController,
+              controller: vCardEmailController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Enter email address',
@@ -334,7 +374,7 @@ class _GenerateQRState extends State<GenerateQR> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: textController,
+              controller: phoneNumberController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Enter recipient phone number',
@@ -348,7 +388,7 @@ class _GenerateQRState extends State<GenerateQR> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: textController,
+              controller: messageController,
               style: const TextStyle(color: Colors.white),
               maxLines: 5,
               decoration: InputDecoration(
@@ -368,7 +408,7 @@ class _GenerateQRState extends State<GenerateQR> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: textController,
+              controller: wiFiSSIDController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Enter Wi-Fi SSID',
@@ -382,7 +422,7 @@ class _GenerateQRState extends State<GenerateQR> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: textController,
+              controller: wiFiPasswordController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Enter Wi-Fi Password',
@@ -398,7 +438,7 @@ class _GenerateQRState extends State<GenerateQR> {
         );
       case 'Social Media':
         return TextField(
-          controller: textController,
+          controller: socialMediaLinkController,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Enter social media profile link',
@@ -412,7 +452,7 @@ class _GenerateQRState extends State<GenerateQR> {
         );
       case 'PDF':
         return TextField(
-          controller: textController,
+          controller: pdfLinkController,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Enter PDF link or file path',
@@ -426,7 +466,7 @@ class _GenerateQRState extends State<GenerateQR> {
         );
       case 'MP3':
         return TextField(
-          controller: textController,
+          controller: mp3LinkController,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Enter MP3 link or file path',
@@ -440,7 +480,7 @@ class _GenerateQRState extends State<GenerateQR> {
         );
       case 'App Stores':
         return TextField(
-          controller: textController,
+          controller: appStoreLinkController,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Enter app store link',
@@ -454,7 +494,7 @@ class _GenerateQRState extends State<GenerateQR> {
         );
       case 'Images':
         return TextField(
-          controller: textController,
+          controller: imageLinkController,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Enter image link or file path',
@@ -468,7 +508,7 @@ class _GenerateQRState extends State<GenerateQR> {
         );
       case '2D Barcode':
         return TextField(
-          controller: textController,
+          controller: barcodeDataController,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Enter 2D barcode data',
@@ -485,7 +525,7 @@ class _GenerateQRState extends State<GenerateQR> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: textController,
+              controller: paymentRecipientController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Enter recipient name or ID',
@@ -499,7 +539,7 @@ class _GenerateQRState extends State<GenerateQR> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: textController,
+              controller: paymentAmountController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Enter amount',
@@ -513,7 +553,7 @@ class _GenerateQRState extends State<GenerateQR> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: textController,
+              controller: paymentReferenceController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Enter payment reference or message (optional)',
@@ -628,26 +668,87 @@ class _GenerateQRState extends State<GenerateQR> {
                   const SizedBox(height: 10),
                   ElevatedButton.icon(
                     onPressed: () {
-                      String LocationData =
-                          "Latitude: $latitude, Longitude: $longitude, Address: $address";
-                      if (LocationData.isEmpty) {
+                      String data = '';
+
+                      // Check the selected data type and set the data accordingly
+                      switch (selectedDataType) {
+                        case 'URL':
+                          data = urlController.text;
+                          break;
+                        case 'E-mail':
+                          // Concatenate email components with appropriate separators
+                          data =
+                              'recipient:${emailController.text}\n subject:${subjectController.text}\n body:${messageController.text}';
+                          break;
+                        case 'V-Card':
+                          // Concatenate v-card components with appropriate separators
+                          data =
+                              'Name: ${contactNameController.text}\n Contact Number:${phoneNumberController.text} \n Email:${vCardEmailController.text}';
+                          break;
+                        case 'Text':
+                          data = textController.text;
+                          break;
+                        case 'SMS':
+                          // Concatenate SMS components with appropriate separators
+                          data =
+                              'Recipient:${phoneNumberController.text}\n Message:${messageController.text}';
+                          break;
+                        case 'Wi-Fi':
+                          // Concatenate Wi-Fi components with appropriate separators
+                          data =
+                              'SSID:${wiFiSSIDController.text}\n password:${wiFiPasswordController.text}';
+                          break;
+                        case 'Social Media':
+                          data = socialMediaLinkController.text;
+                          break;
+                        case 'PDF':
+                          data = pdfLinkController.text;
+                          break;
+                        case 'MP3':
+                          data = mp3LinkController.text;
+                          break;
+                        case 'App Stores':
+                          data = appStoreLinkController.text;
+                          break;
+                        case 'Images':
+                          data = imageLinkController.text;
+                          break;
+                        case '2D Barcode':
+                          data = barcodeDataController.text;
+                          break;
+                        case 'Payment':
+                          // Concatenate payment components with appropriate separators
+                          data =
+                              'recipient name or ID:${paymentRecipientController.text} \n amount:${paymentAmountController.text}\n description:${paymentReferenceController.text}';
+                          break;
+                        case 'Location':
+                          // Concatenate location components with appropriate separators
+                          data =
+                              'Latitude: ${latitudeController.text}, Longitude: ${longitudeController.text}, Address: ${addressController.text}';
+                          break;
+                        default:
+                          break;
+                      }
+
+                      // Now 'data' contains the dynamic data based on the selected data type
+                      // Use 'data' as needed
+
+                      if (data.isEmpty) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content:
-                              Text('Please enter text to generate QR code.'),
+                              Text('Please enter data to generate QR code.'),
                         ));
                       } else if (selectedDataType ==
                           '---- Select any option ----') {
-                        // Handle the case when no data type is selected
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          content: Text(
-                              'Please select a data type.\nEnter the Data in Input Area.'),
+                          content: Text('Please select a data type.'),
                         ));
                       } else {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => GeneratedQrCodeScreen(
-                            text: LocationData,
+                            text: data,
                             dataType: selectedDataType,
                           ),
                         ));
@@ -684,8 +785,6 @@ class GeneratedQrCodeScreen extends StatelessWidget {
     required this.text,
     required this.dataType,
   }) : super(key: key);
-
-  // Implement share and save methods as before
 
   @override
   Widget build(BuildContext context) {
@@ -735,7 +834,7 @@ class GeneratedQrCodeScreen extends StatelessWidget {
                         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
                         foregroundColor: const Color.fromRGBO(32, 29, 43, 1),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 80, vertical: 12),
+                            horizontal: 60, vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -749,7 +848,7 @@ class GeneratedQrCodeScreen extends StatelessWidget {
                         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
                         foregroundColor: const Color.fromRGBO(32, 29, 43, 1),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 80, vertical: 12),
+                            horizontal: 60, vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -769,9 +868,6 @@ class GeneratedQrCodeScreen extends StatelessWidget {
 
   Future<void> _shareQrCode(BuildContext context, String text) async {
     try {
-      final directory = (await getApplicationDocumentsDirectory()).path;
-      String filePath = '$directory/qr_code.png';
-
       // Generate QR code as an image
       final qrValidationResult = QrValidator.validate(
         data: text,
@@ -788,58 +884,70 @@ class GeneratedQrCodeScreen extends StatelessWidget {
         embeddedImage: null,
       );
 
-      // Save QR code as image file
-      final image =
+      // Convert QR code to image data
+      final imageData =
           await painter.toImageData(2048, format: ImageByteFormat.png);
-      final buffer = image!.buffer.asUint8List();
-      final file = io.File(filePath);
-      await file.writeAsBytes(buffer);
 
-      // Share the QR code
-      await Share.shareFiles([filePath], text: 'Check out this QR code!');
+      // Save QR code image to temporary directory
+      final directory = await getTemporaryDirectory();
+      final filePath = '${directory.path}/qr_code.png';
+      final file = io.File(filePath);
+      await file.writeAsBytes(imageData!.buffer.asUint8List());
+
+      // Share the QR code image
+      await Share.shareFiles([file.path], text: 'Check out this QR code!');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error sharing QR code: $e')),
       );
     }
   }
+}
 
-  Future<void> _saveQrCode(BuildContext context, String text) async {
-    try {
-      final directory = (await getApplicationDocumentsDirectory()).path;
-      final filePath = '$directory/qr_code.png';
+Future<void> _saveQrCode(BuildContext context, String text) async {
+  try {
+    // Get the application support directory
+    final directory = (await getApplicationSupportDirectory()).path;
+    String filePath = '$directory/qr_code.png';
 
-      // Generate QR code as an image
-      final qrValidationResult = QrValidator.validate(
-        data: text,
-        version: QrVersions.auto,
-        errorCorrectionLevel: QrErrorCorrectLevel.Q,
-      );
-      final qrCode = qrValidationResult.qrCode;
-      final painter = QrPainter.withQr(
-        qr: qrCode!,
-        color: const Color(0xFF000000),
-        emptyColor: const Color(0xFFFFFFFF),
-        gapless: true,
-        embeddedImageStyle: null,
-        embeddedImage: null,
-      );
+    // Generate QR code as an image
+    final qrValidationResult = QrValidator.validate(
+      data: text,
+      version: QrVersions.auto,
+      errorCorrectionLevel: QrErrorCorrectLevel.Q,
+    );
+    final qrCode = qrValidationResult.qrCode;
+    final painter = QrPainter.withQr(
+      qr: qrCode!,
+      color: const Color(0xFF000000),
+      emptyColor: const Color(0xFFFFFFFF),
+      gapless: true,
+      embeddedImageStyle: null,
+      embeddedImage: null,
+    );
 
-      // Save QR code as image file
-      final image =
-          await painter.toImageData(2048, format: ImageByteFormat.png);
-      final buffer = image!.buffer.asUint8List();
-      final file = io.File(filePath);
-      await file.writeAsBytes(buffer);
+    // Save QR code as image file
+    final image = await painter.toImageData(2048, format: ImageByteFormat.png);
+    final buffer = image!.buffer.asUint8List();
+    final file = io.File(filePath);
+    await file.writeAsBytes(buffer);
 
+    // Save the QR code image to the gallery
+    final result =
+        await ImageGallerySaver.saveImage(Uint8List.fromList(buffer));
+    if (result['isSuccess']) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('QR code saved to documents folder')),
+        const SnackBar(content: Text('QR code saved to gallery')),
       );
-    } catch (e) {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error saving QR code: $e')),
+        const SnackBar(content: Text('Failed to save QR code')),
       );
     }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error saving QR code: $e')),
+    );
   }
 }
 

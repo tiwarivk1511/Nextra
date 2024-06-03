@@ -63,6 +63,7 @@ dependencies:
   speech_to_text: any
   translator: any
   share: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -95,11 +96,12 @@ dev_dependencies:
   geolocator: ^12.0.0
   font_awesome_flutter: ^10.7.0
 
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
-  http: any
+
 flutter:
   assets:
     - assets/logo.png

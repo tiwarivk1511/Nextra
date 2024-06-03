@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nextra/HelpScreen.dart';
 
 class TermsCondition extends StatefulWidget {
   const TermsCondition({super.key});
@@ -49,39 +50,36 @@ class _TermsConditionState extends State<TermsCondition> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
-                      height: 100,
-                      width: double.maxFinite,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image(
-                            image: AssetImage('assets/logo.png'),
-                          width: 80, height: 80,),
-                          SizedBox(width: 10),
-                          Text(
-                            'Nextra',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            )
-                          )
-                        ]
-                      )
-
-                    ),
+                        height: 100,
+                        width: double.maxFinite,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image(
+                                image: AssetImage('assets/logo.png'),
+                                width: 80,
+                                height: 80,
+                              ),
+                              SizedBox(width: 10),
+                              Text('Nextra',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ))
+                            ])),
                     const SizedBox(height: 20),
                     _buildTermsList(),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         // Add functionality to redirect to customer support here
-                        // For example:
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => CustomerSupportScreen(),
-                        //   ),
-                        // );
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HelpScreen(),
+                          ),
+                        );
                       },
                       child: const Text('Contact Us'),
                     ),

@@ -8,6 +8,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class TalkToBot extends StatefulWidget {
   const TalkToBot({super.key});
@@ -125,6 +126,32 @@ class _TalkToBotState extends State<TalkToBot>
   //   });
   // }
 
+  Widget _buildBotResponse() {
+    return _botResponse.isNotEmpty
+        ? Container(
+      padding: EdgeInsets.all(16.0),
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      decoration: BoxDecoration(
+        color: Colors.blue.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: MarkdownBody(
+        data: _botResponse,
+        styleSheet: MarkdownStyleSheet(
+          p: TextStyle(color: Colors.white, fontSize: 16.0),
+          h1: TextStyle(color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.bold),
+          h2: TextStyle(color: Colors.white, fontSize: 22.0, fontWeight: FontWeight.bold),
+          h3: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
+          a: TextStyle(color: Colors.white, fontSize: 16.0),
+
+          blockquote: TextStyle(color: Colors.white70, fontStyle: FontStyle.italic),
+        ),
+      ),
+    )
+        : Container();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,16 +205,16 @@ class _TalkToBotState extends State<TalkToBot>
                             return _isAnimating
                                 ? const SizedBox()
                                 : _controller.value < 0.5
-                                    ? Image.asset(
-                                        'assets/nebulaImg1.png',
-                                        height: 200,
-                                        width: 200,
-                                      )
-                                    : Image.asset(
-                                        'assets/nebulaImg2.png',
-                                        height: 200,
-                                        width: 200,
-                                      );
+                                ? Image.asset(
+                              'assets/nebulaImg1.png',
+                              height: 200,
+                              width: 200,
+                            )
+                                : Image.asset(
+                              'assets/nebulaImg2.png',
+                              height: 200,
+                              width: 200,
+                            );
                           },
                         ),
                         const SizedBox(
@@ -197,8 +224,8 @@ class _TalkToBotState extends State<TalkToBot>
                           _isListening
                               ? 'Listening...'
                               : _userQuery.isEmpty
-                                  ? 'Press icon to talk'
-                                  : _userQuery,
+                              ? 'Press icon to talk'
+                              : _userQuery,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 30,
@@ -206,17 +233,10 @@ class _TalkToBotState extends State<TalkToBot>
                         ),
                         if (_isListening)
                           const CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white),
                           ),
-                        if (_botResponse.isNotEmpty)
-                          Text(
-                            _botResponse,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                            ),
-                          ),
+                        _buildBotResponse(), // Render bot response here
                         const SizedBox(
                           height: 55,
                         ),
@@ -224,7 +244,8 @@ class _TalkToBotState extends State<TalkToBot>
                           width: double.maxFinite,
                           child: Center(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
                               children: [
                                 SizedBox(
                                   height: 55,
@@ -232,7 +253,8 @@ class _TalkToBotState extends State<TalkToBot>
                                   child: Card(
                                     color: Colors.deepPurple.shade200,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(40),
+                                      borderRadius:
+                                      BorderRadius.circular(40),
                                     ),
                                     child: Center(
                                       child: IconButton(
@@ -264,7 +286,8 @@ class _TalkToBotState extends State<TalkToBot>
                                   child: Card(
                                     color: Colors.black26,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(40),
+                                      borderRadius:
+                                      BorderRadius.circular(40),
                                     ),
                                     child: Center(
                                       child: IconButton(

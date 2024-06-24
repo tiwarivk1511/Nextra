@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:nextra/API_Holder.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class ChatWithBotScreen extends StatefulWidget {
   const ChatWithBotScreen({super.key});
@@ -226,7 +227,11 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final bool isUser;
 
-  const ChatMessage({super.key, required this.text, required this.isUser});
+  const ChatMessage({
+    Key? key,
+    required this.text,
+    required this.isUser,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +251,8 @@ class ChatMessage extends StatelessWidget {
           const SizedBox(width: 8.0),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                  vertical: 10.0, horizontal: 16.0),
               decoration: BoxDecoration(
                 color: isUser ? Colors.blueAccent : Colors.white,
                 borderRadius: BorderRadius.circular(8.0),
@@ -259,25 +265,56 @@ class ChatMessage extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Row(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(
-                      text,
-                      style: TextStyle(
+                  MarkdownBody(
+                    data: text,
+                    styleSheet: MarkdownStyleSheet(
+                      p: TextStyle(
                         color: isUser ? Colors.white : Colors.black,
                         fontSize: 16.0,
                       ),
+                      blockquote: TextStyle(
+                        color: isUser ? Colors.white70 : Colors.black54,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 16.0,
+                      ),
+                      h1: TextStyle(
+                        color: isUser ? Colors.white : Colors.black,
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      h2: TextStyle(
+                        color: isUser ? Colors.white : Colors.black,
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      h3: TextStyle(
+                        color: isUser ? Colors.white : Colors.black,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      listBullet: TextStyle(
+                        color: isUser ? Colors.white : Colors.black,
+                        fontSize: 16.0,
+                      ),
+                      a: const TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16.0,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
-                  if (!isUser)
-                    IconButton(
-                      icon: const Icon(Icons.content_copy),
-                      onPressed: () {
-                        _copyToClipboard(context);
-                      },
+                  const SizedBox(height: 8.0),
+                  Align(
+                    alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.copy),
+                      onPressed: () => _copyToClipboard(context),
+                      tooltip: 'Copy',
                     ),
+                  ),
                 ],
               ),
             ),

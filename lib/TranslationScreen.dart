@@ -196,6 +196,8 @@ class _TranslationScreenState extends State<TranslationScreen> {
       await flutterTts.setPitch(1.0);
       await flutterTts.setVolume(4.0);
       await flutterTts.speak(translatedText);
+      //on back button pressed stop the text to speech
+      flutterTts.stop();
     }
   }
 
@@ -240,7 +242,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
           color: Colors.white,
           onPressed: () {
             Navigator.of(context).pop();
-            _speech.stop();
+            flutterTts.stop();
           },
         ),
       ),

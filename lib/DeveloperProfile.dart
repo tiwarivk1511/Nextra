@@ -65,13 +65,14 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     const CircleAvatar(
                       radius: 50,
-                      backgroundColor: Colors.transparent,
-                      // Replace with your profile image link
+                      // current company
                       backgroundImage: NetworkImage(
-                          'https://media.licdn.com/dms/image/D4D03AQFHzBtz16_10w/profile-displayphoto-shrink_200_200/0/1691164256762?e=1717632000&v=beta&t=lLeOvNQfO8nC7DNMKYa-VqAZlgrsLTg1hYDH_q1Bp2o'),
+                          'https://media.licdn.com/dms/image/D4D03AQFHzBtz16_10w/profile-displayphoto-shrink_800_800/0/1691164256762?e=1724284800&v=beta&t=RasNkzlrcA5QAV1QaTUJZ9MpTdYAs7e3ish6q9ioJxQ'),
                     ),
+
                     const SizedBox(height: 20),
                     // Developer Name
                     const Text(
@@ -176,7 +177,7 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                           radius: 50,
                           // previous company
                           backgroundImage: NetworkImage(
-                              'https://www.ingemark.com/wp-content/uploads/2021/05/flutter-980x550.jpg'),
+                              'https://i0.wp.com/www.electrumitsolutions.com/wp-content/uploads/2021/01/FlutterCover.jpg?fit=1024%2C576&ssl=1'),
                         ),
                         SizedBox(width: 10),
                         CircleAvatar(

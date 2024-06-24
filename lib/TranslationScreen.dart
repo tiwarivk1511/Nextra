@@ -240,6 +240,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
           color: Colors.white,
           onPressed: () {
             Navigator.of(context).pop();
+            _speech.stop();
           },
         ),
       ),

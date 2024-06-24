@@ -128,7 +128,7 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                         value: displayRate,
                                         enableAnimation: true,
                                         animationDuration:
-                                            1200, // Animation duration in milliseconds
+                                        1200, // Animation duration in milliseconds
                                         needleColor: Colors.deepPurpleAccent,
                                         tailStyle: const TailStyle(
                                           borderWidth: 0.5,
@@ -177,9 +177,9 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      const Color.fromARGB(255, 23, 243, 255),
+                                  const Color.fromARGB(255, 23, 243, 255),
                                   foregroundColor:
-                                      const Color.fromARGB(255, 23, 243, 255),
+                                  const Color.fromARGB(255, 23, 243, 255),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 80, vertical: 12),
                                   shape: RoundedRectangleBorder(
@@ -216,7 +216,7 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                     backgroundColor: Colors.blueGrey.shade300,
                     minHeight: 10,
                     valueColor:
-                        const AlwaysStoppedAnimation<Color>(Colors.blue),
+                    const AlwaysStoppedAnimation<Color>(Colors.blue),
                     semanticsLabel: 'Linear progress indicator',
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -256,7 +256,7 @@ class _NetworkSpeedTestState extends State<NetworkSpeedTest> {
                               // Add Network Speed Test Results here like Ping, Download Speed, Upload Speed
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                MainAxisAlignment.spaceEvenly,
                                 children: [
                                   // Add Network Speed Test Results here like Ping, Download Speed, Upload Speed with their corresponding values by using separate columns for each
                                   Column(

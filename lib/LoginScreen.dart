@@ -9,7 +9,7 @@ import 'package:nextra/SignupScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ForgetPasswordScreen.dart';
-import 'HomeScreen.dart'; // Assuming you have a HomeScreen after successful login
+import 'HomeScreen.dart'; // HomeScreen after successful login
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

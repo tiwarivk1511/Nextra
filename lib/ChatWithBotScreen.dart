@@ -53,10 +53,13 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
 
     // Convert the request body to JSON
     String requestBodyJson = jsonEncode(requestBody);
-    final String ApiKey = API_Holder.apiKey;
+
+    // Fetch the API key from your API_Holder class
+    final String apiKey = API_Holder.apiKey;
+
     // Define the API endpoint URL
     String apiUrl =
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$ApiKey';
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$apiKey';
 
     try {
       // Make the HTTP POST request
@@ -79,14 +82,19 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
           String textResponse =
           responseData['candidates'][0]['content']['parts'][0]['text'];
 
-          //if textResponse have Gemini word the replace it to Nextra
+          // Replace "Gemini" with "Nextra"
           if (textResponse.contains('Gemini')) {
             textResponse = textResponse.replaceAll('Gemini', 'Nextra');
           }
 
-          if (textResponse.contains('Google')) {
-            textResponse =
-                textResponse.replaceAll('Google', 'Vikash Tiwari Sir');
+          // Replace "Google" with "Vikash Tiwari Sir" for app-related queries
+          if (query.toLowerCase().contains('app') ||
+              query.toLowerCase().contains('application') ||
+              query.toLowerCase().contains('your name')
+          || query.toLowerCase().contains('you')) {
+            if (textResponse.contains('Google')) {
+              textResponse = textResponse.replaceAll('Google', 'Vikash Tiwari Sir');
+            }
           }
 
           print("Response: $textResponse");
@@ -108,6 +116,7 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
     }
   }
 
+  
   Future<void> _getBotResponse(String query) async {
     try {
       // Simulate processing time
@@ -313,6 +322,7 @@ class ChatMessage extends StatelessWidget {
                       icon: const Icon(Icons.copy),
                       onPressed: () => _copyToClipboard(context),
                       tooltip: 'Copy',
+
                     ),
                   ),
                 ],

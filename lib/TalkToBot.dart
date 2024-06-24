@@ -362,11 +362,14 @@ class _TalkToBotState extends State<TalkToBot>
           // Replace "Gemini" with "Nextra" and keep "Google" intact
           textResponse = textResponse.replaceAll('Gemini', 'Nextra');
           // Check if the query contains any reference to the app
-          if (textResponse.contains('Nextra') ||
-              textResponse.toLowerCase().contains('Nextra') ||
-              textResponse.toUpperCase().contains('nextra')) {
-            textResponse =
-                textResponse.replaceAll('Google', 'Vikash Tiwari Sir');
+          // Replace "Google" with "Vikash Tiwari Sir" for app-related queries
+          if (query.toLowerCase().contains('app') ||
+              query.toLowerCase().contains('application') ||
+              query.toLowerCase().contains('your name')
+              || query.toLowerCase().contains('you')) {
+            if (textResponse.contains('Google')) {
+              textResponse = textResponse.replaceAll('Google', 'Vikash Tiwari Sir');
+            }
           }
 
           print("Response: $textResponse");

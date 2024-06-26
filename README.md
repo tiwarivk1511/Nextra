@@ -1,4 +1,4 @@
-# Nextra : Yout AI Companion
+# Nextra : Your AI Companion
 
 A new Flutter project.
 

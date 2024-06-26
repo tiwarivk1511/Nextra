@@ -24,7 +24,8 @@ This innovative app has various advanced features to enhance user experience and
 ## 4. OCR (Optical Character Recognition):
    Extract text from any image effortlessly, streamlining your data entry tasks.
 
-## 5. Translation: Translate text between multiple languages without any word limit as we have seen in another translation apps and websites, breaking down communication barriers.
+## 5. Translation: 
+   Translate text between multiple languages without any word limit as we have seen in another translation apps and websites, breaking down communication barriers.
 
 ## 6. Network Speed Testing:
    Easily test your network’s speed to ensure you are getting the best performance.

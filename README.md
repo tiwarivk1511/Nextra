@@ -33,23 +33,26 @@ This innovative app has various advanced features to enhance user experience and
 ## 7. QR Scanning:
    Scan any QR code using your device’s front or back camera, making it convenient and versatile.
 
-##8 . Generate QR: Create various types of hashtag#QR codes for different purposes, including:
- - URL
- - E-mail
- - V-Card
- - Text
- - SMS
- - Wi-Fi
- - Social Media
- - PDF
- - MP3
- - App Stores
- - Images
- - 2D Barcode
- - Payment
- - Location
+## 8 . Generate QR: 
+   Create various types of hashtag#QR codes for different purposes, including:
+     - URL
+     - E-mail
+     - V-Card
+     - Text
+     - SMS
+     - Wi-Fi
+     - Social Media
+     - PDF
+     - MP3
+     - App Stores
+     - Images
+     - 2D Barcode
+     - Payment
+     - Location
 
-Each feature is designed to make your daily tasks easier, more efficient, and more enjoyable. I am confident this new app will be a valuable addition to my product lineup and greatly benefit my users.
+Each feature is designed to make your daily tasks easier, more efficient, and more enjoyable. 
+I am confident this new app will be a valuable addition to my product lineup and greatly benefit my users.
+
 
 Download the app now: https://drive.google.com/file/d/1491sUluG-a9XjaUS0pnXdk-408WbGnvu/view?usp=drive_link
 

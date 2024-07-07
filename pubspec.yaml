@@ -119,6 +119,7 @@ flutter:
     - assets/botImg.png
     - assets/background.svg
     - assets/techImg.png
+    - assets/vikash.jpg
     - lib/
     - lib/generated/
 

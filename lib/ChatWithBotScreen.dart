@@ -59,7 +59,7 @@ class _ChatWithBotScreenState extends State<ChatWithBotScreen> {
 
     // Define the API endpoint URL
     String apiUrl =
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$apiKey';
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyAmYtafCn4SHCmpPILwaMc_qz_QtZD1g1s';
 
     try {
       // Make the HTTP POST request

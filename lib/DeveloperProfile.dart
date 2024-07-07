@@ -65,12 +65,9 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     const CircleAvatar(
                       radius: 50,
-                      // current company
-                      backgroundImage: NetworkImage(
-                          'https://media.licdn.com/dms/image/D4D03AQFHzBtz16_10w/profile-displayphoto-shrink_800_800/0/1691164256762?e=1724284800&v=beta&t=RasNkzlrcA5QAV1QaTUJZ9MpTdYAs7e3ish6q9ioJxQ'),
+                      backgroundImage: AssetImage('assets/vikash.jpg'), // Path to your asset image
                     ),
 
                     const SizedBox(height: 20),
@@ -184,7 +181,7 @@ class _DeveloperProfileScreenState extends State<DeveloperProfileScreen> {
                           radius: 50,
                           // Replace with your profile image link
                           backgroundImage: NetworkImage(
-                              'https://media.licdn.com/dms/image/C510BAQGyCfCQzGP_RA/company-logo_200_200/0/1631355717831?e=1720656000&v=beta&t=aBC4zhwJTEPVpDCnjHwDEdY0UC5rz4iXbgSRFZzNf2I'),
+                              'https://logidots.com/wp-content/uploads/2021/08/JetpackCompose_logo.png'),
                         ),
                       ],
                     ),

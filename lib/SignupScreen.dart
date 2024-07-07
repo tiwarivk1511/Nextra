@@ -209,7 +209,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: _dateOfBirthController,
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
-                          hintText: 'Date of Birth',
+                          hintText: 'Date of Birth (YYYY-MM-DD)',
                           hintStyle: const TextStyle(color: Colors.white70),
                           border: const OutlineInputBorder(),
                           filled: true,
